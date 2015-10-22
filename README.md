@@ -13,7 +13,7 @@
 Via Composer
 
 ``` bash
-composer global-require spatie/http-status-check
+composer global require spatie/http-status-check
 ```
 
 ## Usage
