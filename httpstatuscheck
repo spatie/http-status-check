@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+
+require 'vendor/autoload.php';
+
+$application = new Spatie\HttpStatusCheck\ConsoleApplication();
+$application->run();
