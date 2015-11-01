@@ -4,6 +4,9 @@ namespace Spatie\HttpStatusCheck;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Spatie\HttpStatusCheck\CrawlObserver\CrawlObserver;
+use Spatie\HttpStatusCheck\CrawlProfile\CrawlProfile;
+use Spatie\HttpStatusCheck\Exceptions\InvalidBaseUrl;
 use Spatie\HttpStatusCheck\Exceptions\InvalidUrl;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -24,7 +27,15 @@ class SiteCrawler {
      */
     protected $crawledUrls;
 
-    protected $responseLogger = null;
+    /**
+     * @var \Spatie\HttpStatusCheck\CrawlObserver\CrawlObserver
+     */
+    protected $observer;
+
+    /**
+     * @var \Spatie\HttpStatusCheck\CrawlProfile\CrawlProfile
+     */
+    protected $crawlProfile;
 
     public function __construct(Client $client)
     {
@@ -33,6 +44,8 @@ class SiteCrawler {
     }
 
     /**
+     * Set the base url.
+     *
      * @param mixed $baseUrl
      * @return SiteCrawler
      */
@@ -42,20 +55,37 @@ class SiteCrawler {
         return $this;
     }
 
+
     /**
-     * @param $responseLogger
+     * Set the crawl observer.
+     *
+     * @param CrawlObserver $observer
      * @return $this
      */
-    public function setResponseLogger($responseLogger)
+    public function setObserver(CrawlObserver $observer)
     {
-        $this->responseLogger = $responseLogger;
-
-        $this->crawledUrls = collect();
+        $this->observer = $observer;
 
         return $this;
     }
 
-    public function startCrawling($baseUrl)
+    /**
+     * Set the crawl profile.
+     *
+     * @param CrawlProfile $crawlProfile
+     */
+    public function setCrawlProfile(CrawlProfile $crawlProfile)
+    {
+        $this->crawlProfile = $crawlProfile;
+    }
+
+    /**
+     * Start the crawling process.
+     *
+     * @param Url $baseUrl
+     * @throws InvalidBaseUrl
+     */
+    public function startCrawling(Url $baseUrl)
     {
         if ($baseUrl->isRelative()) throw new InvalidBaseUrl();
 
@@ -65,8 +95,17 @@ class SiteCrawler {
 
     }
 
+    /**
+     * Crawl the given url.
+     *
+     * @param Url $url
+     */
     protected function crawlUrl(Url $url)
     {
+        if (! $this->crawlProfile->shouldCrawl($url)) return;
+
+        $this->observer->willCrawl($url);
+
         try {
             $response = $this->client->request('GET', (string)$url);
 
@@ -75,11 +114,9 @@ class SiteCrawler {
         {
             $response = $exception->getResponse();
         }
-        $this->logResponse($response, $url);
+        $this->observer->haveCrawled($url, $response);
 
 
-
-        
         $this->crawledUrls->push($url);
 
         if ($url->host === $this->baseUrl->host) {
@@ -88,6 +125,11 @@ class SiteCrawler {
 
     }
 
+    /**
+     * Crawl all links in the given html.
+     *
+     * @param $html
+     */
     protected function crawlAllLinks($html)
     {
         $allLinks = $this->getAllLinks($html);
@@ -102,12 +144,17 @@ class SiteCrawler {
             ->filter(function(Url $url) {
                 return ! $this->hasAlreadyCrawled($url);
             })
+            ->filter(function(Url $url) {
+                return $this->crawlProfile->shouldCrawl($url);
+            })
             ->map(function(Url $url) {
                 $this->crawlUrl($url);
             });
     }
 
     /**
+     * Get all links in the given html.
+     *
      * @param string $html
      * @return \Spatie\HttpStatusCheck\Url[]
      */
@@ -120,13 +167,13 @@ class SiteCrawler {
         });
     }
 
-    protected function logResponse($response, $url)
-    {
-        if (is_null($this->responseLogger)) return;
 
-        call_user_func_array($this->responseLogger, [$response, $url]);
-    }
-
+    /**
+     * Determine if the crawled has already crawled the given url.
+     *
+     * @param Url $url
+     * @return bool
+     */
     protected function hasAlreadyCrawled(Url $url)
     {
         foreach($this->crawledUrls as $crawledUrl) {
@@ -136,18 +183,26 @@ class SiteCrawler {
         return false;
     }
 
+    /**
+     * Normalize the given url.
+     *
+     * @param Url $url
+     * @return $this
+     */
     protected function normalizeUrl(Url $url)
     {
 
         if ($url->isRelative())
         {
             $url
+
                 ->setHost($this->baseUrl->host)
                 ->setScheme($this->baseUrl->scheme);
         }
 
         return $url->removeFragment();
     }
+
 
 
 }

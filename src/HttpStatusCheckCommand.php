@@ -2,6 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
+use Spatie\HttpStatusCheck\CrawlObserver\CrawlLogger;
+use Spatie\HttpStatusCheck\CrawlProfile\CrawlAllUrls;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,7 +35,8 @@ class HttpStatusCheckCommand extends Command
         $siteCrawler = $this->getSiteCrawler();
 
         $siteCrawler
-            ->setResponseLogger([$this, 'logResponse'])
+            ->setObserver(new CrawlLogger())
+            ->setCrawlProfile(new CrawlAllUrls())
             ->startCrawling(Url::create($input->getArgument('url')));
 
         return 0;
@@ -51,4 +54,6 @@ class HttpStatusCheckCommand extends Command
 
         return new SiteCrawler($client);
     }
+
+
 }
