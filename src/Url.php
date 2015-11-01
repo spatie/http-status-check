@@ -32,7 +32,7 @@ class Url
 
             if (! isset($urlProperties[$property])) return;
 
-            $this->$property = $urlProperties[$property];
+            $this->$property = strtolower($urlProperties[$property]);
 
         });
     }
@@ -42,7 +42,13 @@ class Url
         return is_null($this->host);
     }
 
-    public function setSchema($scheme)
+    public function isEmailUrl()
+    {
+        return $this->scheme === 'mailto';
+    }
+
+
+    public function setScheme($scheme)
     {
         $this->scheme = $scheme;
 
@@ -56,9 +62,16 @@ class Url
         return $this;
     }
 
+    public function removeFragment()
+    {
+        $this->path = explode('#', $this->path)[0];
+
+        return $this;
+    }
+
     public function __toString()
     {
-        $path = starts_with($this->path, '/') ? substr($this->path,0,-1) : $this->path;
+        $path = starts_with($this->path, '/') ? substr($this->path,1) : $this->path;
 
         return "{$this->scheme}://{$this->host}/{$path}";
     }

@@ -3,6 +3,7 @@
 namespace Spatie\HttpStatusCheck;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Spatie\HttpStatusCheck\Exceptions\InvalidUrl;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -13,6 +14,9 @@ class SiteCrawler {
      */
     protected $client;
 
+    /**
+     * @var Url;
+     */
     protected $baseUrl;
 
     /**
@@ -53,7 +57,7 @@ class SiteCrawler {
 
     public function startCrawling($baseUrl)
     {
-        if (! $baseUrl->isValid()) throw new InvalidUrl;
+        if ($baseUrl->isRelative()) throw new InvalidBaseUrl();
 
         $this->baseUrl = $baseUrl;
 
@@ -63,14 +67,24 @@ class SiteCrawler {
 
     protected function crawlUrl(Url $url)
     {
-        $response = $this->client->request('GET', (string)$url);
+        echo 'start crawling:' . (string)$url .PHP_EOL;
 
-        $this->logResponse($response, $url);
+        try {
+            $response = $this->client->request('GET', (string)$url);
+            $this->logResponse($response, $url);
+        }
+        catch(RequestException $exception)
+        {
+            echo 'no no no ' . $url;
+        }
+
+
+
         
         $this->crawledUrls->push($url);
 
         if ($url->host === $this->baseUrl->host) {
-            $this->crawlAllLinks($response->getBody());
+            $this->crawlAllLinks($response->getBody()->getContents());
         }
 
     }
@@ -79,12 +93,20 @@ class SiteCrawler {
     {
         $allLinks = $this->getAllLinks($html);
 
+        var_dump($allLinks);
+
         collect($allLinks)
-            ->filter(function($url) {
+            ->filter(function(Url $url) {
+                return ! $url->isEmailUrl();
+            })
+            ->map(function(Url $url) {
+                return $this->normalizeUrl($url);
+            })
+            ->filter(function(Url $url) {
                 return ! $this->hasAlreadyCrawled($url);
             })
-
-            ->map(function($url) {
+            ->map(function(Url $url) {
+                echo 'in map:' . (string)$url .PHP_EOL;
                 $this->crawlUrl($url);
             });
     }
@@ -118,6 +140,18 @@ class SiteCrawler {
         return false;
     }
 
+    protected function normalizeUrl(Url $url)
+    {
+
+        if ($url->isRelative())
+        {
+            $url
+                ->setHost($this->baseUrl->host)
+                ->setScheme($this->baseUrl->scheme);
+        }
+
+        return $url->removeFragment();
+    }
 
 
 }

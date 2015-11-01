@@ -50,4 +50,53 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($url->isRelative());
     }
+
+    /**
+     * @test
+     */
+    public function it_can_change_the_host()
+    {
+        $this->testUrl->setHost('google.com');
+
+        $this->assertEquals('https://google.com/opensource', (string)$this->testUrl);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_change_the_scheme()
+    {
+        $this->testUrl->setScheme('http');
+
+        $this->assertEquals('http://spatie.be/opensource', (string)$this->testUrl);
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_factory_method_to_create_an_instance_from_a_string()
+    {
+        $url = 'https://spatie.be/opensource';
+
+        $this->assertEquals($url, (string)Url::create($url));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_remove_the_fragment()
+    {
+        $url = Url::create('https://spatie.be/team#willem')->removeFragment();
+
+        $this->assertEquals('https://spatie.be/team', (string)$url);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_determine_if_the_url_is_an_email_url()
+    {
+        $this->assertFalse(Url::create('https://spatie.be/')->isEmailUrl());
+        $this->assertTrue(Url::create('mailto:info@spatie.be')->isEmailUrl());
+    }
 }

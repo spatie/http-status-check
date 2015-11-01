@@ -34,13 +34,13 @@ class HttpStatusCheckCommand extends Command
 
         $siteCrawler
             ->setResponseLogger([$this, 'logResponse'])
-            ->startCrawling(Url::create($this->argument('url')));
+            ->startCrawling(Url::create($input->getArgument('url')));
 
         return 0;
     }
 
     public function logResponse($response, $url) {
-        echo $url.PHP_EOL;
+        echo 'in command: '.$url.PHP_EOL;
     }
 
 
