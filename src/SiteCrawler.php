@@ -12,12 +12,12 @@ use Symfony\Component\DomCrawler\Crawler;
 class SiteCrawler
 {
     /**
-     * @var Client
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
     /**
-     * @var Url;
+     * @var \Spatie\HttpStatusCheck\Url;
      */
     protected $baseUrl;
 
@@ -46,9 +46,9 @@ class SiteCrawler
     /**
      * Set the base url.
      *
-     * @param mixed $baseUrl
+     * @param string $baseUrl
      *
-     * @return SiteCrawler
+     * @return $this
      */
     public function setBaseUrl($baseUrl)
     {
@@ -60,7 +60,7 @@ class SiteCrawler
     /**
      * Set the crawl observer.
      *
-     * @param CrawlObserver $observer
+     * @param \Spatie\HttpStatusCheck\CrawlObserver\CrawlObserver $observer
      *
      * @return $this
      */
@@ -74,7 +74,7 @@ class SiteCrawler
     /**
      * Set the crawl profile.
      *
-     * @param CrawlProfile $crawlProfile
+     * @param \Spatie\HttpStatusCheck\CrawlProfile\CrawlProfile $crawlProfile
      *
      * @return $this
      */
@@ -88,9 +88,9 @@ class SiteCrawler
     /**
      * Start the crawling process.
      *
-     * @param Url $baseUrl
+     * @param \Spatie\HttpStatusCheck\Url $baseUrl
      *
-     * @throws InvalidBaseUrl
+     * @throws \Spatie\HttpStatusCheck\Exceptions\InvalidBaseUrl
      */
     public function startCrawling(Url $baseUrl)
     {
@@ -106,7 +106,7 @@ class SiteCrawler
     /**
      * Crawl the given url.
      *
-     * @param Url $url
+     * @param \Spatie\HttpStatusCheck\Url $url
      */
     protected function crawlUrl(Url $url)
     {
@@ -137,7 +137,7 @@ class SiteCrawler
     /**
      * Crawl all links in the given html.
      *
-     * @param $html
+     * @param string $html
      */
     protected function crawlAllLinks($html)
     {
@@ -177,7 +177,7 @@ class SiteCrawler
     /**
      * Determine if the crawled has already crawled the given url.
      *
-     * @param Url $url
+     * @param \Spatie\HttpStatusCheck\Url $url
      *
      * @return bool
      */
@@ -195,7 +195,7 @@ class SiteCrawler
     /**
      * Normalize the given url.
      *
-     * @param Url $url
+     * @param \Spatie\HttpStatusCheck\Url $url
      *
      * @return $this
      */

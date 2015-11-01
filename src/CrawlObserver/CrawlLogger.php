@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CrawlLogger implements CrawlObserver
 {
     /**
-     * @var OutputInterface
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
 
@@ -21,14 +21,20 @@ class CrawlLogger implements CrawlObserver
     }
 
     /**
-     * @param Url $url
+     * Called when the crawl will crawl the url.
      *
-     * @return mixed
+     * @param \Spatie\HttpStatusCheck\Url $url
      */
     public function willCrawl(Url $url)
     {
     }
 
+    /**
+     * Called when the crawl will crawl has crawled the given url.
+     *
+     * @param \Spatie\HttpStatusCheck\Url $url
+     * @param \GuzzleHttp\Psr7\Response   $response
+     */
     public function haveCrawled(Url $url, Response $response)
     {
         $statusCode = $response->getStatusCode();
@@ -42,6 +48,9 @@ class CrawlLogger implements CrawlObserver
         $this->crawledUrls[$response->getStatusCode()][] = $url;
     }
 
+    /**
+     * Display the summary of the crawl.
+     */
     public function displaySummary()
     {
         $this->output->writeln('');
@@ -59,7 +68,14 @@ class CrawlLogger implements CrawlObserver
         }
     }
 
-    public function getColorTagForStatusCode($code)
+    /**
+     * Get the color tag for the given status code.
+     *
+     * @param string $code
+     *
+     * @return string
+     */
+    protected function getColorTagForStatusCode($code)
     {
         if (starts_with($code, '2')) {
             return 'info';

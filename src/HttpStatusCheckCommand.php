@@ -44,11 +44,11 @@ class HttpStatusCheckCommand extends Command
         return 0;
     }
 
-    public function logResponse($response, $url)
-    {
-        echo $response->getStatusCode().'-'.$url.PHP_EOL;
-    }
-
+    /**
+     * Get the crawler.
+     *
+     * @return \Spatie\HttpStatusCheck\SiteCrawler
+     */
     public function getSiteCrawler()
     {
         $client = new \GuzzleHttp\Client();

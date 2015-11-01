@@ -7,7 +7,9 @@ use Spatie\HttpStatusCheck\Url;
 interface CrawlProfile
 {
     /**
-     * @param Url $url
+     * Determine if the given url should be crawled.
+     *
+     * @param \Spatie\HttpStatusCheck\Url $url
      *
      * @return bool
      */

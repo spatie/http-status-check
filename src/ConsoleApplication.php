@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 class ConsoleApplication extends Application
 {
     /**
-     * @param InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      *
      * @return string
      */

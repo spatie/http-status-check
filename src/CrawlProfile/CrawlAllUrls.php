@@ -9,7 +9,7 @@ class CrawlAllUrls implements CrawlProfile
     /**
      * Determine if the given url should be crawled.
      *
-     * @param Url $url
+     * @param \Spatie\HttpStatusCheck\Url $url
      *
      * @return bool
      */
