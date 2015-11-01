@@ -2,6 +2,7 @@
 
 namespace Spatie\HttpStatusCheck\CrawlObserver;
 
+use GuzzleHttp\Psr7\Response;
 use Spatie\HttpStatusCheck\Url;
 
 interface CrawlObserver
@@ -20,7 +21,8 @@ interface CrawlObserver
      *
      * @param Url $url
      *
+     * @param Response $response
      * @return mixed
      */
-    public function haveCrawled(Url $url, $response);
+    public function haveCrawled(Url $url, Response $response);
 }

@@ -32,10 +32,14 @@ class HttpStatusCheckCommand extends Command
     {
         $siteCrawler = $this->getSiteCrawler();
 
+        $crawlLogger = new CrawlLogger($output);
+
         $siteCrawler
-            ->setObserver(new CrawlLogger())
+            ->setObserver($crawlLogger)
             ->setCrawlProfile(new CrawlAllUrls())
             ->startCrawling(Url::create($input->getArgument('url')));
+
+        $crawlLogger->displaySummary();
 
         return 0;
     }

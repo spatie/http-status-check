@@ -121,7 +121,7 @@ class SiteCrawler
         $this->observer->willCrawl($url);
 
         try {
-            $response = $this->client->request('GET', (string) $url, ['allow_redirects' => false]);
+            $response = $this->client->request('GET', (string) $url);
         } catch (RequestException $exception) {
             echo $exception->getCode() . ' - ' . $exception->getMessage() . $exception->getResponse()->getReasonPhrase() . PHP_EOL;
             $response = $exception->getResponse();
