@@ -67,16 +67,15 @@ class SiteCrawler {
 
     protected function crawlUrl(Url $url)
     {
-        echo 'start crawling:' . (string)$url .PHP_EOL;
-
         try {
             $response = $this->client->request('GET', (string)$url);
-            $this->logResponse($response, $url);
+
         }
         catch(RequestException $exception)
         {
-            echo 'no no no ' . $url;
+            $response = $exception->getResponse();
         }
+        $this->logResponse($response, $url);
 
 
 
@@ -93,8 +92,6 @@ class SiteCrawler {
     {
         $allLinks = $this->getAllLinks($html);
 
-        var_dump($allLinks);
-
         collect($allLinks)
             ->filter(function(Url $url) {
                 return ! $url->isEmailUrl();
@@ -106,7 +103,6 @@ class SiteCrawler {
                 return ! $this->hasAlreadyCrawled($url);
             })
             ->map(function(Url $url) {
-                echo 'in map:' . (string)$url .PHP_EOL;
                 $this->crawlUrl($url);
             });
     }

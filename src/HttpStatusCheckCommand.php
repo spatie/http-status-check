@@ -40,7 +40,7 @@ class HttpStatusCheckCommand extends Command
     }
 
     public function logResponse($response, $url) {
-        echo 'in command: '.$url.PHP_EOL;
+        echo $response->getStatusCode(). '-'.$url.PHP_EOL;
     }
 
 
