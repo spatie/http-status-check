@@ -48,6 +48,8 @@ class CrawlLogger implements CrawlObserver
         $this->output->writeln('Crawling summary');
         $this->output->writeln('----------------');
 
+        ksort($this->crawledUrls);
+
         foreach ($this->crawledUrls as $statusCode => $urls) {
             $colorTag = $this->getColorTagForStatusCode($statusCode);
 
