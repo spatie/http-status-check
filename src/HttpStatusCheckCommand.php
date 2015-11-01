@@ -18,7 +18,7 @@ class HttpStatusCheckCommand extends Command
             ->addArgument(
                 'url',
                 InputArgument::REQUIRED,
-                'The URL to check'
+                'The Url to check'
             );
     }
 
