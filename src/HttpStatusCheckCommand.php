@@ -8,7 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DomCrawler\Crawler;
 
 class HttpStatusCheckCommand extends Command
 {
@@ -24,14 +23,13 @@ class HttpStatusCheckCommand extends Command
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $siteCrawler = $this->getSiteCrawler();
 
         $siteCrawler
@@ -42,18 +40,15 @@ class HttpStatusCheckCommand extends Command
         return 0;
     }
 
-    public function logResponse($response, $url) {
-        echo $response->getStatusCode(). '-'.$url.PHP_EOL;
+    public function logResponse($response, $url)
+    {
+        echo $response->getStatusCode().'-'.$url.PHP_EOL;
     }
-
 
     public function getSiteCrawler()
     {
         $client = new \GuzzleHttp\Client();
 
-
         return new SiteCrawler($client);
     }
-
-
 }

@@ -8,8 +8,8 @@ interface CrawlProfile
 {
     /**
      * @param Url $url
+     *
      * @return bool
      */
     public function shouldCrawl(Url $url);
-
 }

@@ -28,9 +28,11 @@ class Url
     {
         $urlProperties = parse_url($url);
 
-        collect(['scheme', 'host', 'path'])->map(function($property) use ($urlProperties) {
+        collect(['scheme', 'host', 'path'])->map(function ($property) use ($urlProperties) {
 
-            if (! isset($urlProperties[$property])) return;
+            if (! isset($urlProperties[$property])) {
+                return;
+            }
 
             $this->$property = strtolower($urlProperties[$property]);
 
@@ -42,11 +44,15 @@ class Url
         return is_null($this->host);
     }
 
+    public function isProtocolIndependent()
+    {
+        return is_null($this->scheme);
+    }
+
     public function isEmailUrl()
     {
         return $this->scheme === 'mailto';
     }
-
 
     public function setScheme($scheme)
     {
@@ -71,7 +77,7 @@ class Url
 
     public function __toString()
     {
-        $path = starts_with($this->path, '/') ? substr($this->path,1) : $this->path;
+        $path = starts_with($this->path, '/') ? substr($this->path, 1) : $this->path;
 
         return "{$this->scheme}://{$this->host}/{$path}";
     }

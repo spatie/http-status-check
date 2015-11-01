@@ -7,11 +7,10 @@ use GuzzleHttp\Exception\RequestException;
 use Spatie\HttpStatusCheck\CrawlObserver\CrawlObserver;
 use Spatie\HttpStatusCheck\CrawlProfile\CrawlProfile;
 use Spatie\HttpStatusCheck\Exceptions\InvalidBaseUrl;
-use Spatie\HttpStatusCheck\Exceptions\InvalidUrl;
 use Symfony\Component\DomCrawler\Crawler;
 
-class SiteCrawler {
-
+class SiteCrawler
+{
     /**
      * @var Client
      */
@@ -39,27 +38,30 @@ class SiteCrawler {
 
     public function __construct(Client $client)
     {
-
         $this->client = $client;
+
+        $this->crawledUrls = collect();
     }
 
     /**
      * Set the base url.
      *
      * @param mixed $baseUrl
+     *
      * @return SiteCrawler
      */
     public function setBaseUrl($baseUrl)
     {
         $this->baseUrl = $baseUrl;
+
         return $this;
     }
-
 
     /**
      * Set the crawl observer.
      *
      * @param CrawlObserver $observer
+     *
      * @return $this
      */
     public function setObserver(CrawlObserver $observer)
@@ -73,26 +75,32 @@ class SiteCrawler {
      * Set the crawl profile.
      *
      * @param CrawlProfile $crawlProfile
+     *
+     * @return $this
      */
     public function setCrawlProfile(CrawlProfile $crawlProfile)
     {
         $this->crawlProfile = $crawlProfile;
+
+        return $this;
     }
 
     /**
      * Start the crawling process.
      *
      * @param Url $baseUrl
+     *
      * @throws InvalidBaseUrl
      */
     public function startCrawling(Url $baseUrl)
     {
-        if ($baseUrl->isRelative()) throw new InvalidBaseUrl();
+        if ($baseUrl->isRelative()) {
+            throw new InvalidBaseUrl();
+        }
 
         $this->baseUrl = $baseUrl;
 
         $this->crawlUrl($baseUrl);
-
     }
 
     /**
@@ -102,27 +110,28 @@ class SiteCrawler {
      */
     protected function crawlUrl(Url $url)
     {
-        if (! $this->crawlProfile->shouldCrawl($url)) return;
+        if (! $this->crawlProfile->shouldCrawl($url)) {
+            return;
+        }
+
+        if ($this->hasAlreadyCrawled($url)) {
+            return;
+        }
 
         $this->observer->willCrawl($url);
 
         try {
-            $response = $this->client->request('GET', (string)$url);
-
-        }
-        catch(RequestException $exception)
-        {
+            $response = $this->client->request('GET', (string) $url, ['allow_redirects' => true]);
+        } catch (RequestException $exception) {
             $response = $exception->getResponse();
         }
         $this->observer->haveCrawled($url, $response);
-
 
         $this->crawledUrls->push($url);
 
         if ($url->host === $this->baseUrl->host) {
             $this->crawlAllLinks($response->getBody()->getContents());
         }
-
     }
 
     /**
@@ -135,19 +144,16 @@ class SiteCrawler {
         $allLinks = $this->getAllLinks($html);
 
         collect($allLinks)
-            ->filter(function(Url $url) {
+            ->filter(function (Url $url) {
                 return ! $url->isEmailUrl();
             })
-            ->map(function(Url $url) {
+            ->map(function (Url $url) {
                 return $this->normalizeUrl($url);
             })
-            ->filter(function(Url $url) {
-                return ! $this->hasAlreadyCrawled($url);
-            })
-            ->filter(function(Url $url) {
+            ->filter(function (Url $url) {
                 return $this->crawlProfile->shouldCrawl($url);
             })
-            ->map(function(Url $url) {
+            ->map(function (Url $url) {
                 $this->crawlUrl($url);
             });
     }
@@ -156,6 +162,7 @@ class SiteCrawler {
      * Get all links in the given html.
      *
      * @param string $html
+     *
      * @return \Spatie\HttpStatusCheck\Url[]
      */
     protected function getAllLinks($html)
@@ -167,17 +174,20 @@ class SiteCrawler {
         });
     }
 
-
     /**
      * Determine if the crawled has already crawled the given url.
      *
      * @param Url $url
+     *
      * @return bool
      */
     protected function hasAlreadyCrawled(Url $url)
     {
-        foreach($this->crawledUrls as $crawledUrl) {
-            if ((string)$crawledUrl == (string) $url) return true;
+        foreach ($this->crawledUrls as $crawledUrl) {
+
+            if ((string) $crawledUrl == (string) $url) {
+                return true;
+            }
         }
 
         return false;
@@ -187,22 +197,21 @@ class SiteCrawler {
      * Normalize the given url.
      *
      * @param Url $url
+     *
      * @return $this
      */
     protected function normalizeUrl(Url $url)
     {
-
-        if ($url->isRelative())
-        {
-            $url
-
+        if ($url->isRelative()) {
+            return $url
                 ->setHost($this->baseUrl->host)
                 ->setScheme($this->baseUrl->scheme);
         }
 
+        if ($url->isProtocolIndependent()) {
+            $url->setScheme($this->baseUrl->scheme);
+        }
+
         return $url->removeFragment();
     }
-
-
-
 }

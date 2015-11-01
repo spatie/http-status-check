@@ -34,7 +34,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_be_converted_to_a_string()
     {
-        $this->assertEquals('https://spatie.be/opensource', (string)$this->testUrl);
+        $this->assertEquals('https://spatie.be/opensource', (string) $this->testUrl);
     }
 
     /**
@@ -54,11 +54,25 @@ class UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_can_determine_if_an_url_is_protocol_independent()
+    {
+        $url = new Url('//google.com/test');
+
+        $this->assertTrue($url->isProtocolIndependent());
+
+        $url = new Url($this->testUrl);
+
+        $this->assertFalse($url->isProtocolIndependent());
+    }
+
+    /**
+     * @test
+     */
     public function it_can_change_the_host()
     {
         $this->testUrl->setHost('google.com');
 
-        $this->assertEquals('https://google.com/opensource', (string)$this->testUrl);
+        $this->assertEquals('https://google.com/opensource', (string) $this->testUrl);
     }
 
     /**
@@ -68,7 +82,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $this->testUrl->setScheme('http');
 
-        $this->assertEquals('http://spatie.be/opensource', (string)$this->testUrl);
+        $this->assertEquals('http://spatie.be/opensource', (string) $this->testUrl);
     }
 
     /**
@@ -78,7 +92,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $url = 'https://spatie.be/opensource';
 
-        $this->assertEquals($url, (string)Url::create($url));
+        $this->assertEquals($url, (string) Url::create($url));
     }
 
     /**
@@ -88,7 +102,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $url = Url::create('https://spatie.be/team#willem')->removeFragment();
 
-        $this->assertEquals('https://spatie.be/team', (string)$url);
+        $this->assertEquals('https://spatie.be/team', (string) $url);
     }
 
     /**
