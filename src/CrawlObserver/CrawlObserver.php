@@ -19,9 +19,9 @@ interface CrawlObserver
     /**
      * Called when the crawl will crawl has crawled the given url.
      *
-     * @param Url $url
-     *
+     * @param Url      $url
      * @param Response $response
+     *
      * @return mixed
      */
     public function haveCrawled(Url $url, Response $response);

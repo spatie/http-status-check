@@ -8,7 +8,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger implements CrawlObserver
 {
-
     /**
      * @var OutputInterface
      */
@@ -18,7 +17,6 @@ class CrawlLogger implements CrawlObserver
 
     public function __construct(OutputInterface $output)
     {
-
         $this->output = $output;
     }
 
@@ -33,8 +31,14 @@ class CrawlLogger implements CrawlObserver
 
     public function haveCrawled(Url $url, Response $response)
     {
-        $this->output->writeln($response->getStatusCode() . ' - ' . $url);
-        
+        $statusCode = $response->getStatusCode();
+
+        $colorTag = $this->getColorTagForStatusCode($statusCode);
+
+        $timestamp = date('Y-m-d H:i:s');
+
+        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$response->getStatusCode()} - {$url}</{$colorTag}>");
+
         $this->crawledUrls[$response->getStatusCode()][] = $url;
     }
 
@@ -44,9 +48,25 @@ class CrawlLogger implements CrawlObserver
         $this->output->writeln('Crawling summary');
         $this->output->writeln('----------------');
 
-        foreach($this->crawledUrls as $statusCode => $urls) {
-            $this->output->writeln('Crawled ' . count($urls) . ' url(s) with statuscode ' . $statusCode);
+        foreach ($this->crawledUrls as $statusCode => $urls) {
+            $colorTag = $this->getColorTagForStatusCode($statusCode);
+
+            $count = count($urls);
+
+            $this->output->writeln("<{$colorTag}>Crawled {$count} url(s) with statuscode {$statusCode}</{$colorTag}>");
         }
     }
 
+    public function getColorTagForStatusCode($code)
+    {
+        if (starts_with($code, '2')) {
+            return 'info';
+        }
+
+        if (starts_with($code, '3')) {
+            return 'comment';
+        }
+
+        return 'error';
+    }
 }

@@ -15,7 +15,7 @@
         "symfony/console": "^2.7",
         "symfony/dom-crawler": "^2.7",
         "guzzlehttp/guzzle": "^6.1",
-        "illuminate/support": "^5.1"
+        "illuminate/support": "^5.1",
     },
     "require-dev": {
         "phpunit/phpunit": "5.0.*"
@@ -29,5 +29,8 @@
         "psr-4": {
             "Spatie\\HttpStatusCheck\\Test\\": "tests"
         }
-    }
+    },
+    "bin": [
+        "http-status-check"
+    ]
 }

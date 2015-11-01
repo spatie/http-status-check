@@ -123,7 +123,6 @@ class SiteCrawler
         try {
             $response = $this->client->request('GET', (string) $url);
         } catch (RequestException $exception) {
-            echo $exception->getCode() . ' - ' . $exception->getMessage() . $exception->getResponse()->getReasonPhrase() . PHP_EOL;
             $response = $exception->getResponse();
         }
         $this->observer->haveCrawled($url, $response);
@@ -185,7 +184,6 @@ class SiteCrawler
     protected function hasAlreadyCrawled(Url $url)
     {
         foreach ($this->crawledUrls as $crawledUrl) {
-
             if ((string) $crawledUrl == (string) $url) {
                 return true;
             }
