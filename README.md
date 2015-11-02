@@ -2,9 +2,11 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/spatie/http-status-check.svg?style=flat-square)](https://travis-ci.org/spatie/http-status-check)
+[![Build Status](https://img.shields.io/travis/spatie/http-status-check/master.svg?style=flat-square)](https://travis-ci.org/spatie/http-status-check)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/xxx.svg?style=flat-square)](https://insight.sensiolabs.com/projects/xxx)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/http-status-check.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/http-status-check)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
+
 
 *Work in progress*
 
@@ -37,8 +39,8 @@ If you discover any security related issues, please email freek@spatie.be instea
 
 ## Credits
 
-- [Sebastian De Deyne](https://github.com/sebastiandedeyne)
 - [Freek Van der Herten](https://github.com/freekmurze)
+- [Sebastian De Deyne](https://github.com/sebastiandedeyne)
 - [All Contributors](../../contributors)
 
 ## About Spatie

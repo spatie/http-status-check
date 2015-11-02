@@ -2,10 +2,7 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
-use Spatie\HttpStatusCheck\CrawlObserver\CrawlLogger;
-use Spatie\HttpStatusCheck\CrawlProfile\CrawlAllUrls;
+use Spatie\Crawler\Crawler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,31 +29,10 @@ class HttpStatusCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $siteCrawler = $this->getSiteCrawler();
-
-        $crawlLogger = new CrawlLogger($output);
-
-        $siteCrawler
-            ->setObserver($crawlLogger)
-            ->setCrawlProfile(new CrawlAllUrls())
-            ->startCrawling(Url::create($input->getArgument('url')));
-
-        $crawlLogger->displaySummary();
+        Crawler::create()
+            ->setObserver(new CrawlLogger($output))
+            ->startCrawling($input->getArgument('url'));
 
         return 0;
-    }
-
-    /**
-     * Get the crawler.
-     *
-     * @return \Spatie\HttpStatusCheck\SiteCrawler
-     */
-    public function getSiteCrawler()
-    {
-        $client = new Client([
-            RequestOptions::ALLOW_REDIRECTS => false,
-            RequestOptions::COOKIES => true]);
-
-        return new SiteCrawler($client);
     }
 }

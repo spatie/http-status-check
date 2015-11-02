@@ -1,9 +1,10 @@
 <?php
 
-namespace Spatie\HttpStatusCheck\CrawlObserver;
+namespace Spatie\HttpStatusCheck;
 
-use GuzzleHttp\Psr7\Response;
-use Spatie\HttpStatusCheck\Url;
+use Psr\Http\Message\ResponseInterface;
+use Spatie\Crawler\CrawlObserver;
+use Spatie\Crawler\Url;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger implements CrawlObserver
@@ -23,7 +24,7 @@ class CrawlLogger implements CrawlObserver
     /**
      * Called when the crawl will crawl the url.
      *
-     * @param \Spatie\HttpStatusCheck\Url $url
+     * @param \Spatie\Crawler\Url $url
      */
     public function willCrawl(Url $url)
     {
@@ -32,10 +33,10 @@ class CrawlLogger implements CrawlObserver
     /**
      * Called when the crawl will crawl has crawled the given url.
      *
-     * @param \Spatie\HttpStatusCheck\Url $url
-     * @param \GuzzleHttp\Psr7\Response   $response
+     * @param \Spatie\Crawler\Url                 $url
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
-    public function haveCrawled(Url $url, Response $response)
+    public function haveCrawled(Url $url, ResponseInterface $response)
     {
         $statusCode = $response->getStatusCode();
 
@@ -51,9 +52,9 @@ class CrawlLogger implements CrawlObserver
     }
 
     /**
-     * Display the summary of the crawl.
+     * Called when the crawl has ended.
      */
-    public function displaySummary()
+    public function finishedCrawling()
     {
         $this->output->writeln('');
         $this->output->writeln('Crawling summary');
