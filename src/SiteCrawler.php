@@ -153,7 +153,7 @@ class SiteCrawler
             ->filter(function (Url $url) {
                 return $this->crawlProfile->shouldCrawl($url);
             })
-            ->map(function (Url $url) {
+            ->each(function (Url $url) {
                 $this->crawlUrl($url);
             });
     }
@@ -203,8 +203,9 @@ class SiteCrawler
     {
         if ($url->isRelative()) {
             return $url
-                ->setHost($this->baseUrl->host)
-                ->setScheme($this->baseUrl->scheme);
+                ->setScheme($this->baseUrl->scheme)
+                ->setHost($this->baseUrl->host);
+
         }
 
         if ($url->isProtocolIndependent()) {
