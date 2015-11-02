@@ -14,7 +14,7 @@ class ConsoleApplication extends Application
      */
     protected function getCommandName(InputInterface $input)
     {
-        return 'httpstatuscheck';
+        return 'http-status-check';
     }
 
     /**

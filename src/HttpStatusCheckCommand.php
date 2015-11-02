@@ -12,7 +12,7 @@ class HttpStatusCheckCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('httpstatuscheck')
+        $this->setName('http-status-check')
             ->setDescription('Check the status codes for a URL and all it\'s sublinks.')
             ->addArgument(
                 'url',
