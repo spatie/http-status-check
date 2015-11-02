@@ -2,6 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Spatie\HttpStatusCheck\CrawlObserver\CrawlLogger;
 use Spatie\HttpStatusCheck\CrawlProfile\CrawlAllUrls;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +53,9 @@ class HttpStatusCheckCommand extends Command
      */
     public function getSiteCrawler()
     {
-        $client = new \GuzzleHttp\Client();
+        $client = new Client([
+            RequestOptions::ALLOW_REDIRECTS => false,
+            RequestOptions::COOKIES => true]);
 
         return new SiteCrawler($client);
     }

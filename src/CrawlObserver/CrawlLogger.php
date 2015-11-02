@@ -41,9 +41,11 @@ class CrawlLogger implements CrawlObserver
 
         $colorTag = $this->getColorTagForStatusCode($statusCode);
 
+        $reason = $response->getReasonPhrase();
+
         $timestamp = date('Y-m-d H:i:s');
 
-        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$response->getStatusCode()} - {$url}</{$colorTag}>");
+        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$response->getStatusCode()} - {$reason} - {$url}</{$colorTag}>");
 
         $this->crawledUrls[$response->getStatusCode()][] = $url;
     }
