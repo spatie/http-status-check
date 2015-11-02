@@ -1,7 +1,7 @@
 {
-    "name": "spatie/http-status-checker",
+    "name": "spatie/http-status-check",
     "description": "CLI tool to crawl a website and check HTTP status code",
-    "homepage": "https://github.com/spatie/http-status-check",
+    "homepage": "https://github.com/spatie/http-status-checker",
     "license": "MIT",
     "keywords": [
         "spatie",
