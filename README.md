@@ -1,4 +1,4 @@
-# CLI tool to check the http status code on every page of a site
+# CLI tool to check the statuscode on every page of a website
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -6,7 +6,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/http-status-check.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/http-status-check)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 
-This repository provides a tool to check the http status ode on every page of a given website.
+This repository provides a tool to check the http-statuscode on every page of a given website.
 
 ## Install
 
