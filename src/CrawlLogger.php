@@ -36,7 +36,7 @@ class CrawlLogger implements CrawlObserver
      * @param \Spatie\Crawler\Url                 $url
      * @param \Psr\Http\Message\ResponseInterface $response
      */
-    public function haveCrawled(Url $url, ResponseInterface $response)
+    public function hasBeenCrawled(Url $url, ResponseInterface $response)
     {
         $statusCode = $response->getStatusCode();
 
