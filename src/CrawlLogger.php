@@ -14,8 +14,14 @@ class CrawlLogger implements CrawlObserver
      */
     protected $output;
 
+    /**
+     * @var array
+     */
     protected $crawledUrls = [];
 
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
