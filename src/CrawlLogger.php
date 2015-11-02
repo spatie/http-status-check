@@ -69,6 +69,8 @@ class CrawlLogger implements CrawlObserver
 
             $this->output->writeln("<{$colorTag}>Crawled {$count} url(s) with statuscode {$statusCode}</{$colorTag}>");
         }
+
+        $this->output->writeln("");
     }
 
     /**

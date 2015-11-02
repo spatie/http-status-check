@@ -29,9 +29,14 @@ class HttpStatusCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $baseUrl = $input->getArgument('url');
+
+        $output->writeln("Start scanning {$baseUrl}");
+        $output->writeln("");
+
         Crawler::create()
-            ->setObserver(new CrawlLogger($output))
-            ->startCrawling($input->getArgument('url'));
+            ->setCrawlObserver(new CrawlLogger($output))
+            ->startCrawling($baseUrl);
 
         return 0;
     }
