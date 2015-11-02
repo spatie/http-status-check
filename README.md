@@ -26,7 +26,7 @@ http-status-check <url>
 
 It outputs a line per link found.
  
-![screenshot](http://spatie.github.io/http-status-scan/images/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/spatie/http-status-check/gh-pages/images/screenshot.png)
  
  When the crawl is finished a summary will be shown.
 
