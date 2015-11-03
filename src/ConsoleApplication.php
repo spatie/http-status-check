@@ -3,41 +3,20 @@
 namespace Spatie\HttpStatusCheck;
 
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\InputInterface;
 
 class ConsoleApplication extends Application
 {
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     *
-     * @return string
-     */
-    protected function getCommandName(InputInterface $input)
+    public function __construct()
     {
-        return 'http-status-check';
+        error_reporting(-1);
+
+        parent::__construct('Http status check', '1.0.0');
+
+        $this->add(new ScanCommand());
     }
 
-    /**
-     * @return array
-     */
-    protected function getDefaultCommands()
+    public function getLongVersion()
     {
-        $defaultCommands = parent::getDefaultCommands();
-
-        $defaultCommands[] = new HttpStatusCheckCommand();
-
-        return $defaultCommands;
-    }
-
-    /**
-     * @return \Symfony\Component\Console\Input\InputDefinition
-     */
-    public function getDefinition()
-    {
-        $inputDefinition = parent::getDefinition();
-
-        $inputDefinition->setArguments();
-
-        return $inputDefinition;
+        return parent::getLongVersion().' by <comment>Spatie</comment>';
     }
 }

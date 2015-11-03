@@ -21,7 +21,7 @@ composer global require spatie/http-status-check
 This tool will scan all links on a given site.
 
 ```bash
-http-status-check <url>
+http-status-check scan <url>
 ```
 
 It outputs a line per link found.

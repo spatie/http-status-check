@@ -8,12 +8,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class HttpStatusCheckCommand extends Command
+class ScanCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('http-status-check')
-            ->setDescription('Check the status codes for a URL and all it\'s sublinks.')
+        $this->setName('scan')
+            ->setDescription('Check the http status code of all links on a website.')
             ->addArgument(
                 'url',
                 InputArgument::REQUIRED,
