@@ -29,6 +29,9 @@ class ConsoleApplication extends Application
         return $defaultCommands;
     }
 
+    /**
+     * @return \Symfony\Component\Console\Input\InputDefinition
+     */
     public function getDefinition()
     {
         $inputDefinition = parent::getDefinition();

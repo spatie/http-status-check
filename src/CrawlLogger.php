@@ -2,13 +2,14 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use Psr\Http\Message\ResponseInterface;
 use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger implements CrawlObserver
 {
+    const UNRESPONSIVE_HOST = 'Host did not respond';
+
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
@@ -39,22 +40,22 @@ class CrawlLogger implements CrawlObserver
     /**
      * Called when the crawl will crawl has crawled the given url.
      *
-     * @param \Spatie\Crawler\Url                 $url
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Spatie\Crawler\Url                      $url
+     * @param \Psr\Http\Message\ResponseInterface|null $response
      */
-    public function hasBeenCrawled(Url $url, ResponseInterface $response)
+    public function hasBeenCrawled(Url $url, $response)
     {
-        $statusCode = $response->getStatusCode();
+        $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
+
+        $reason = $response ? $response->getReasonPhrase() : '';
 
         $colorTag = $this->getColorTagForStatusCode($statusCode);
 
-        $reason = $response->getReasonPhrase();
-
         $timestamp = date('Y-m-d H:i:s');
 
-        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$response->getStatusCode()} - {$reason} - {$url}</{$colorTag}>");
+        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$url}</{$colorTag}>");
 
-        $this->crawledUrls[$response->getStatusCode()][] = $url;
+        $this->crawledUrls[$statusCode][] = $url;
     }
 
     /**
@@ -73,10 +74,16 @@ class CrawlLogger implements CrawlObserver
 
             $count = count($urls);
 
-            $this->output->writeln("<{$colorTag}>Crawled {$count} url(s) with statuscode {$statusCode}</{$colorTag}>");
+            if (is_numeric($statusCode)) {
+                $this->output->writeln("<{$colorTag}>Crawled {$count} url(s) with statuscode {$statusCode}</{$colorTag}>");
+            }
+
+            if ($statusCode == static::UNRESPONSIVE_HOST) {
+                $this->output->writeln("<{$colorTag}>{$count} url(s) did have unresponsive host(s)</{$colorTag}>");
+            }
         }
 
-        $this->output->writeln("");
+        $this->output->writeln('');
     }
 
     /**

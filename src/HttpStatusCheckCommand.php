@@ -32,7 +32,7 @@ class HttpStatusCheckCommand extends Command
         $baseUrl = $input->getArgument('url');
 
         $output->writeln("Start scanning {$baseUrl}");
-        $output->writeln("");
+        $output->writeln('');
 
         Crawler::create()
             ->setCrawlObserver(new CrawlLogger($output))
