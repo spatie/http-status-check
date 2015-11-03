@@ -8,6 +8,8 @@
 
 This repository provides a tool to check the http-statuscode of every link on a given website.
 
+Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
+
 ## Install
 
 Via Composer
