@@ -1,4 +1,4 @@
-# Check the statuscode of every page of a website
+# Check the statuscode of all links on a website
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -6,7 +6,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/http-status-check.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/http-status-check)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 
-This repository provides a tool to check the http-statuscode of every page on a given website.
+This repository provides a tool to check the http-statuscode of every link on a given website.
 
 ## Install
 
