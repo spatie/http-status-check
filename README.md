@@ -4,6 +4,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/d68de61f-d4df-4c99-af9e-3d9ad1ca22eb.svg?style=flat-square)](https://insight.sensiolabs.com/projects/d68de61f-d4df-4c99-af9e-3d9ad1ca22eb)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/http-status-check.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/http-status-check)
+[![StyleCI](https://styleci.io/repos/44727732/shield?branch=master)](https://styleci.io/repos/44727732)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 
 This repository provides a tool to check the http-statuscode of every link on a given website.
