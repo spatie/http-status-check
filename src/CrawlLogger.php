@@ -2,6 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
+use GuzzleHttp\Exception\ClientException;
+use Psr\Http\Message\ResponseInterface;
 use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,13 +39,10 @@ class CrawlLogger implements CrawlObserver
     {
     }
 
-    /**
+    /*
      * Called when the crawl will crawl has crawled the given url.
-     *
-     * @param \Spatie\Crawler\Url                      $url
-     * @param \Psr\Http\Message\ResponseInterface|null $response
      */
-    public function hasBeenCrawled(Url $url, $response)
+    public function hasBeenCrawled(Url $url, ResponseInterface $response, ClientException $exception): bool
     {
         $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
 
