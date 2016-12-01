@@ -42,7 +42,7 @@ class CrawlLogger implements CrawlObserver
     /*
      * Called when the crawl will crawl has crawled the given url.
      */
-    public function hasBeenCrawled(Url $url, ResponseInterface $response, ClientException $exception): bool
+    public function hasBeenCrawled(Url $url, ResponseInterface $response, Url $foundOn = null): bool
     {
         $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
 
@@ -52,7 +52,13 @@ class CrawlLogger implements CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$url}</{$colorTag}>");
+        $message = (string)$url;
+
+        if ($foundOn) {
+            $message .= " (found on {$foundOn}";
+        }
+
+        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$message}</{$colorTag}>");
 
         $this->crawledUrls[$statusCode][] = $url;
     }
