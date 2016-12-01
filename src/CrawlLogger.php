@@ -2,7 +2,6 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
@@ -52,7 +51,7 @@ class CrawlLogger implements CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = (string)$url;
+        $message = (string) $url;
 
         if ($foundOn) {
             $message .= " (found on {$foundOn}";
