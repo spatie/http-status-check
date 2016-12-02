@@ -2,7 +2,6 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
@@ -42,7 +41,7 @@ class CrawlLogger implements CrawlObserver
     /*
      * Called when the crawl will crawl has crawled the given url.
      */
-    public function hasBeenCrawled(Url $url, ResponseInterface $response, Url $foundOn = null): bool
+    public function hasBeenCrawled(Url $url, ResponseInterface $response, Url $foundOn = null)
     {
         $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
 
@@ -54,7 +53,7 @@ class CrawlLogger implements CrawlObserver
 
         $message = (string)$url;
 
-        if ($foundOn) {
+        if ($foundOn && $colorTag === 'error') {
             $message .= " (found on {$foundOn}";
         }
 
@@ -91,14 +90,7 @@ class CrawlLogger implements CrawlObserver
         $this->output->writeln('');
     }
 
-    /**
-     * Get the color tag for the given status code.
-     *
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getColorTagForStatusCode($code)
+    protected function getColorTagForStatusCode(string $code): string
     {
         if (starts_with($code, '2')) {
             return 'info';
