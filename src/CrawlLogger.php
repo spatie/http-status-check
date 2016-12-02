@@ -54,7 +54,7 @@ class CrawlLogger implements CrawlObserver
         $message = (string)$url;
 
         if ($foundOn && $colorTag === 'error') {
-            $message .= " (found on {$foundOn}";
+            $message .= " (found on {$foundOn})";
         }
 
         $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$message}</{$colorTag}>");
