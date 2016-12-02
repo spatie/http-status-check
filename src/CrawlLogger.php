@@ -51,7 +51,7 @@ class CrawlLogger implements CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = (string)$url;
+        $message = (string) $url;
 
         if ($foundOn && $colorTag === 'error') {
             $message .= " (found on {$foundOn})";
