@@ -38,10 +38,14 @@ class CrawlLogger implements CrawlObserver
     {
     }
 
-    /*
-     * Called when the crawl will crawl has crawled the given url.
+    /**
+     * Called when the crawler has crawled the given url.
+     *
+     * @param \Spatie\Crawler\Url $url
+     * @param \Psr\Http\Message\ResponseInterface|null $response
+     * @param \Spatie\Crawler\Url $foundOn
      */
-    public function hasBeenCrawled(Url $url, ResponseInterface $response, Url $foundOn = null)
+    public function hasBeenCrawled(Url $url, $response, Url $foundOn = null)
     {
         $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
 
