@@ -13,7 +13,7 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->logPath = __DIR__ . '/temp/consoleOutput.txt';
+        $this->logPath = __DIR__.'/temp/consoleOutput.txt';
 
         file_put_contents($this->logPath, PHP_EOL);
     }
@@ -21,7 +21,7 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_scan_a_site()
     {
-        exec('php ' . __DIR__ . "/../http-status-check scan http://localhost:8080 > {$this->logPath}");
+        exec('php '.__DIR__."/../http-status-check scan http://localhost:8080 > {$this->logPath}");
 
         $this->appearsInConsoleOutput([
             'Start scanning http://localhost:8080',
@@ -41,14 +41,14 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
      */
     protected function appearsInConsoleOutput($texts)
     {
-        if (!is_array($texts)) {
+        if (! is_array($texts)) {
             $texts = [$texts];
         }
 
         foreach ($texts as $text) {
             $logContent = file_get_contents($this->logPath);
 
-            $this->assertEquals(1, substr_count($logContent, $text . PHP_EOL), "Did not find `{$text}` in the log");
+            $this->assertEquals(1, substr_count($logContent, $text.PHP_EOL), "Did not find `{$text}` in the log");
         }
     }
 }
