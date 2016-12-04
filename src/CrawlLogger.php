@@ -2,7 +2,6 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use Psr\Http\Message\ResponseInterface;
 use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
 use Symfony\Component\Console\Output\OutputInterface;
