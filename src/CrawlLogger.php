@@ -2,8 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
+use Spatie\Crawler\CrawlObserver;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger implements CrawlObserver
@@ -54,7 +54,7 @@ class CrawlLogger implements CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = (string)$url;
+        $message = (string) $url;
 
         if ($foundOn && $colorTag === 'error') {
             $message .= " (found on {$foundOn})";
