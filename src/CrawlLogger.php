@@ -2,8 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\Url;
+use Spatie\Crawler\CrawlObserver;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger implements CrawlObserver
@@ -38,12 +38,13 @@ class CrawlLogger implements CrawlObserver
     }
 
     /**
-     * Called when the crawl will crawl has crawled the given url.
+     * Called when the crawler has crawled the given url.
      *
-     * @param \Spatie\Crawler\Url                      $url
+     * @param \Spatie\Crawler\Url $url
      * @param \Psr\Http\Message\ResponseInterface|null $response
+     * @param \Spatie\Crawler\Url $foundOn
      */
-    public function hasBeenCrawled(Url $url, $response)
+    public function hasBeenCrawled(Url $url, $response, Url $foundOn = null)
     {
         $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
 
@@ -53,7 +54,13 @@ class CrawlLogger implements CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$url}</{$colorTag}>");
+        $message = (string) $url;
+
+        if ($foundOn && $colorTag === 'error') {
+            $message .= " (found on {$foundOn})";
+        }
+
+        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$message}</{$colorTag}>");
 
         $this->crawledUrls[$statusCode][] = $url;
     }
@@ -86,14 +93,7 @@ class CrawlLogger implements CrawlObserver
         $this->output->writeln('');
     }
 
-    /**
-     * Get the color tag for the given status code.
-     *
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getColorTagForStatusCode($code)
+    protected function getColorTagForStatusCode(string $code): string
     {
         if (starts_with($code, '2')) {
             return 'info';

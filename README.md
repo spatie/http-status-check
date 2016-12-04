@@ -32,7 +32,7 @@ composer global require spatie/http-status-check
 This tool will scan all links on a given site.
 
 ```bash
-http-status-check scan <url>
+http-status-check scan https://example.com
 ```
 
 It outputs a line per link found.
@@ -41,6 +41,11 @@ It outputs a line per link found.
  
  When the crawl is finished a summary will be shown.
 
+By default it uses 10 concurrent connections to speed up the crawling process. You can change that number passing a different value to the `concurrency`-option.
+
+```bash
+http-status-check scan https://example.com --concurrency=20
+```
 
 
 ## Changelog
@@ -54,6 +59,20 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Security
 
 If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+
+## Testing
+
+To run the tests you'll have to start the included node based server first in a separate terminal window.
+
+```bash
+cd tests/server
+./start_server.sh
+```
+
+With the server running, you can start testing.
+```bash
+vendor/bin/phpunit
+```
 
 ## Credits
 
