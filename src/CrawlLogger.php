@@ -119,6 +119,7 @@ class CrawlLogger implements CrawlObserver
                 return true;
             }
         }
+
         return false;
     }
 }
