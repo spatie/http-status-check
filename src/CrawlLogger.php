@@ -95,14 +95,30 @@ class CrawlLogger implements CrawlObserver
 
     protected function getColorTagForStatusCode(string $code): string
     {
-        if (starts_with($code, '2')) {
+        if ($this->startsWith($code, '2')) {
             return 'info';
         }
 
-        if (starts_with($code, '3')) {
+        if ($this->startsWith($code, '3')) {
             return 'comment';
         }
 
         return 'error';
+    }
+
+    /**
+     * @param string|null $haystack
+     * @param string|array $needles
+     *
+     * @return bool
+     */
+    public function startsWith($haystack, $needles): bool
+    {
+        foreach ((array) $needles as $needle) {
+            if ($needle != '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+                return true;
+            }
+        }
+        return false;
     }
 }

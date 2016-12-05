@@ -23,7 +23,7 @@
     "require": {
         "php": "^7.0",
         "symfony/console": "^3.0",
-        "spatie/crawler": "v2.x-dev"
+        "spatie/crawler": "^2.0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
