@@ -7,7 +7,7 @@
 [![StyleCI](https://styleci.io/repos/44727732/shield?branch=master)](https://styleci.io/repos/44727732)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/http-status-check.svg?style=flat-square)](https://packagist.org/packages/spatie/http-status-check)
 
-This repository provides a tool to check the http-statuscode of every link on a given website.
+This repository provides a tool to check the http statuscode of every link on a given website.
 
 Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
