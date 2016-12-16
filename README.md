@@ -47,6 +47,11 @@ By default it uses 10 concurrent connections to speed up the crawling process. Y
 http-status-check scan https://example.com --concurrency=20
 ```
 
+You can also write all urls that gave a non-2xx or non-3xx response to a file:
+
+```bash
+http-status-check scan https://example.com --output=log.txt
+```
 
 ## Changelog
 
