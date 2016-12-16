@@ -3,9 +3,6 @@
 namespace Spatie\HttpStatusCheck\Test;
 
 use PHPUnit_Framework_TestCase;
-use Spatie\HttpStatusCheck\ScanCommand;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 
 class ScanCommandTest extends PHPUnit_Framework_TestCase
 {
@@ -54,7 +51,7 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
 
         exec('php '.__DIR__."/../http-status-check scan --output {$this->outputFile} http://localhost:8080");
 
-        $this->assertFileEquals(__DIR__ . '/fixtures/output.txt', $this->outputFile);
+        $this->assertFileEquals(__DIR__.'/fixtures/output.txt', $this->outputFile);
     }
 
     /**
