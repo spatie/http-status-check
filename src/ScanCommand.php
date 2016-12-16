@@ -61,10 +61,11 @@ class ScanCommand extends Command
                     false
                 );
 
-                if (!$helper->ask($input, $output, $question)) {
+                if (! $helper->ask($input, $output, $question)) {
                     $output->writeln('Aborting...');
+
                     return 0;
-                };
+                }
             }
 
             $crawlLogger->setOutputFile($input->getOption('output'));
