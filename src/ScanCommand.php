@@ -32,7 +32,7 @@ class ScanCommand extends Command
                 'output',
                 'o',
                 InputOption::VALUE_REQUIRED,
-                'The file to write the scan log for non 2xx responses'
+                'Log all non-2xx and non-3xx responses in this file'
             );
     }
 
@@ -56,8 +56,15 @@ class ScanCommand extends Command
 
             if (file_exists($outputFile)) {
                 $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion('Overwrite existing file? ', false);
-                $crawlLogger->setOverwriteOutputFile($helper->ask($input, $output, $question));
+                $question = new ConfirmationQuestion(
+                    "The output file `{$outputFile}` already exists. Overwrite it? (y/n)",
+                    false
+                );
+
+                if (!$helper->ask($input, $output, $question)) {
+                    $output->writeln('Aborting...');
+                    return 0;
+                };
             }
 
             $crawlLogger->setOutputFile($input->getOption('output'));

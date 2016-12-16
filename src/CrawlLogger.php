@@ -13,7 +13,7 @@ class CrawlLogger implements CrawlObserver
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
-    protected $output;
+    protected $consoleOutput;
 
     /**
      * @var array
@@ -26,16 +26,11 @@ class CrawlLogger implements CrawlObserver
     protected $outputFile = null;
 
     /**
-     * @var bool
+     * @param \Symfony\Component\Console\Output\OutputInterface $consoleOutput
      */
-    protected $overwriteOutputFile = false;
-
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    public function __construct(OutputInterface $output)
+    public function __construct(OutputInterface $consoleOutput)
     {
-        $this->output = $output;
+        $this->consoleOutput = $consoleOutput;
     }
 
     /**
@@ -64,13 +59,17 @@ class CrawlLogger implements CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = (string) $url;
+        $message = "{$statusCode} {$reason} - " . (string) $url;
 
         if ($foundOn && $colorTag === 'error') {
             $message .= " (found on {$foundOn})";
         }
 
-        $this->output->writeln("<{$colorTag}>[{$timestamp}] {$statusCode} {$reason} - {$message}</{$colorTag}>");
+        if ($this->outputFile && $colorTag === 'error') {
+            file_put_contents($this->outputFile, $message);
+        }
+
+        $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
 
         $this->crawledUrls[$statusCode][] = $url;
     }
@@ -80,14 +79,9 @@ class CrawlLogger implements CrawlObserver
      */
     public function finishedCrawling()
     {
-        $outputFileData = [];
-        $outputFileData[] = '';
-        $outputFileData[] = 'Crawling summary';
-        $outputFileData[] = '----------------';
-
-        $this->output->writeln('');
-        $this->output->writeln('Crawling summary');
-        $this->output->writeln('----------------');
+        $this->consoleOutput->writeln('');
+        $this->consoleOutput->writeln('Crawling summary');
+        $this->consoleOutput->writeln('----------------');
 
         ksort($this->crawledUrls);
 
@@ -97,29 +91,15 @@ class CrawlLogger implements CrawlObserver
             $count = count($urls);
 
             if (is_numeric($statusCode)) {
-                $this->output->writeln("<{$colorTag}>Crawled {$count} url(s) with statuscode {$statusCode}</{$colorTag}>");
+                $this->consoleOutput->writeln("<{$colorTag}>Crawled {$count} url(s) with statuscode {$statusCode}</{$colorTag}>");
             }
 
             if ($statusCode == static::UNRESPONSIVE_HOST) {
-                $this->output->writeln("<{$colorTag}>{$count} url(s) did have unresponsive host(s)</{$colorTag}>");
-            }
-
-            if ($this->outputFile !== null && $colorTag !== 'info') {
-                $outputFileData[] = "Status: {$statusCode}";
-                $outputFileData = array_merge($outputFileData, $urls);
+                $this->consoleOutput->writeln("<{$colorTag}>{$count} url(s) did have unresponsive host(s)</{$colorTag}>");
             }
         }
 
-        $outputFileData[] = '';
-        $this->output->writeln('');
-
-        if ($this->outputFile !== null) {
-            if ($this->overwriteOutputFile === false) {
-                file_put_contents($this->outputFile, implode(\PHP_EOL, $outputFileData), \FILE_APPEND);
-            } else {
-                file_put_contents($this->outputFile, implode(\PHP_EOL, $outputFileData));
-            }
-        }
+        $this->consoleOutput->writeln('');
     }
 
     protected function getColorTagForStatusCode(string $code): string
@@ -160,15 +140,5 @@ class CrawlLogger implements CrawlObserver
     public function setOutputFile($filename)
     {
         $this->outputFile = $filename;
-    }
-
-    /**
-     * Set the state indicating if the output file should be overwritten.
-     *
-     * @param bool $flag
-     */
-    public function setOverwriteOutputFile($flag)
-    {
-        $this->overwriteOutputFile = (bool) $flag;
     }
 }
