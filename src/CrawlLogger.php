@@ -21,6 +21,16 @@ class CrawlLogger implements CrawlObserver
     protected $crawledUrls = [];
 
     /**
+     * @var string|null
+     */
+    protected $outputFile = null;
+
+    /**
+     * @var bool
+     */
+    protected $overwriteOutputFile = false;
+
+    /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     public function __construct(OutputInterface $output)
@@ -70,6 +80,11 @@ class CrawlLogger implements CrawlObserver
      */
     public function finishedCrawling()
     {
+        $outputFileData = [];
+        $outputFileData[] = '';
+        $outputFileData[] = 'Crawling summary';
+        $outputFileData[] = '----------------';
+
         $this->output->writeln('');
         $this->output->writeln('Crawling summary');
         $this->output->writeln('----------------');
@@ -88,9 +103,23 @@ class CrawlLogger implements CrawlObserver
             if ($statusCode == static::UNRESPONSIVE_HOST) {
                 $this->output->writeln("<{$colorTag}>{$count} url(s) did have unresponsive host(s)</{$colorTag}>");
             }
+
+            if ($this->outputFile !== null && $colorTag !== 'info') {
+                $outputFileData[] = "Status: {$statusCode}";
+                $outputFileData = array_merge($outputFileData, $urls);
+            }
         }
 
+        $outputFileData[] = '';
         $this->output->writeln('');
+
+        if ($this->outputFile !== null) {
+            if ($this->overwriteOutputFile === false) {
+                file_put_contents($this->outputFile, implode(\PHP_EOL, $outputFileData), \FILE_APPEND);
+            } else {
+                file_put_contents($this->outputFile, implode(\PHP_EOL, $outputFileData));
+            }
+        }
     }
 
     protected function getColorTagForStatusCode(string $code): string
@@ -121,5 +150,25 @@ class CrawlLogger implements CrawlObserver
         }
 
         return false;
+    }
+
+    /**
+     * Set the filename to write the output log.
+     *
+     * @param string $filename
+     */
+    public function setOutputFile($filename)
+    {
+        $this->outputFile = $filename;
+    }
+
+    /**
+     * Set the state indicating if the output file should be overwritten.
+     *
+     * @param bool $flag
+     */
+    public function setOverwriteOutputFile($flag)
+    {
+        $this->overwriteOutputFile = (bool) $flag;
     }
 }
