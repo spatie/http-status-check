@@ -3,6 +3,8 @@
 namespace Spatie\HttpStatusCheck;
 
 use Spatie\Crawler\Crawler;
+use Spatie\Crawler\CrawlInternalUrls;
+use Spatie\Crawler\CrawlAllUrls;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,6 +35,13 @@ class ScanCommand extends Command
                 'o',
                 InputOption::VALUE_REQUIRED,
                 'Log all non-2xx and non-3xx responses in this file'
+            )
+            ->addOption(
+                'external',
+                'x',
+                InputOption::VALUE_REQUIRED,
+                'Check external links',
+                true
             );
     }
 
@@ -45,6 +54,7 @@ class ScanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseUrl = $input->getArgument('url');
+        $crawlProfile = $input->getOption('external') === 'false' ? new CrawlInternalUrls($baseUrl) : new CrawlAllUrls();
 
         $output->writeln("Start scanning {$baseUrl}");
         $output->writeln('');
@@ -74,6 +84,7 @@ class ScanCommand extends Command
         Crawler::create()
             ->setConcurrency($input->getOption('concurrency'))
             ->setCrawlObserver($crawlLogger)
+            ->setCrawlProfile($crawlProfile)
             ->startCrawling($baseUrl);
 
         return 0;
