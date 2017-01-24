@@ -3,8 +3,8 @@
 namespace Spatie\HttpStatusCheck;
 
 use Spatie\Crawler\Crawler;
-use Spatie\Crawler\CrawlInternalUrls;
 use Spatie\Crawler\CrawlAllUrls;
+use Spatie\Crawler\CrawlInternalUrls;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
