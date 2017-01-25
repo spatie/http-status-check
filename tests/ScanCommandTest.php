@@ -43,7 +43,7 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-        /** @test */
+    /** @test */
     public function it_can_scan_only_internal_links()
     {
         exec('php '.__DIR__."/../http-status-check scan http://localhost:8080 -x false > {$this->consoleLog}");
