@@ -33,6 +33,27 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
             '200 OK - http://localhost:8080/link1',
             '200 OK - http://localhost:8080/link2',
             '302 Found - http://localhost:8080/link4',
+            '200 OK - http://example.com/',
+            '200 OK - http://localhost:8080/link3',
+            '404 Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
+            'Crawling summary',
+            'Crawled 5 url(s) with statuscode 200',
+            'Crawled 1 url(s) with statuscode 302',
+            'Crawled 1 url(s) with statuscode 404',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_scan_only_internal_links()
+    {
+        exec('php '.__DIR__."/../http-status-check scan http://localhost:8080 -x false > {$this->consoleLog}");
+
+        $this->appearsInConsoleOutput([
+            'Start scanning http://localhost:8080',
+            '200 OK - http://localhost:8080/',
+            '200 OK - http://localhost:8080/link1',
+            '200 OK - http://localhost:8080/link2',
+            '302 Found - http://localhost:8080/link4',
             '200 OK - http://localhost:8080/link3',
             '404 Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
             'Crawling summary',
