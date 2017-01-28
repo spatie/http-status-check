@@ -53,6 +53,12 @@ You can also write all urls that gave a non-2xx or non-3xx response to a file:
 http-status-check scan https://example.com --output=log.txt
 ```
 
+When the crawler finds a link to an external site it will by default crawl that link as well. If you don't want to crawler to crawl such external urls use the `--dont-crawl-external-links` option
+
+```bash
+http-status-check scan https://example.com --dont-crawl-external-links
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.

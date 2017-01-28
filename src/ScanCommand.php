@@ -37,10 +37,10 @@ class ScanCommand extends Command
                 'Log all non-2xx and non-3xx responses in this file'
             )
             ->addOption(
-                'external',
+                'dont-crawl-external-links',
                 'x',
                 InputOption::VALUE_REQUIRED,
-                'Check external links',
+                'Crawl external links',
                 true
             );
     }
@@ -54,7 +54,7 @@ class ScanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseUrl = $input->getArgument('url');
-        $crawlProfile = $input->getOption('external') === 'false' ? new CrawlInternalUrls($baseUrl) : new CrawlAllUrls();
+        $crawlProfile = $input->getOption('dont-crawl-external-links') === 'false' ? new CrawlInternalUrls($baseUrl) : new CrawlAllUrls();
 
         $output->writeln("Start scanning {$baseUrl}");
         $output->writeln('');

@@ -2,6 +2,9 @@
 
 All Notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 2.2.0
+- add `dont-crawl-external-urls` option
+
 ## 2.1.1
 - append urls to log file instead of overwriting entire file
 
