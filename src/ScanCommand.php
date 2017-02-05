@@ -39,9 +39,8 @@ class ScanCommand extends Command
             ->addOption(
                 'dont-crawl-external-links',
                 'x',
-                InputOption::VALUE_REQUIRED,
-                'Crawl external links',
-                true
+                InputOption::VALUE_NONE,
+                'Dont crawl external links'
             );
     }
 
@@ -54,7 +53,7 @@ class ScanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseUrl = $input->getArgument('url');
-        $crawlProfile = $input->getOption('dont-crawl-external-links') === 'false' ? new CrawlInternalUrls($baseUrl) : new CrawlAllUrls();
+        $crawlProfile = $input->getOption('dont-crawl-external-links') ? new CrawlInternalUrls($baseUrl) : new CrawlAllUrls();
 
         $output->writeln("Start scanning {$baseUrl}");
         $output->writeln('');

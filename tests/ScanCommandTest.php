@@ -46,7 +46,7 @@ class ScanCommandTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_scan_only_internal_links()
     {
-        exec('php '.__DIR__."/../http-status-check scan http://localhost:8080 -x false > {$this->consoleLog}");
+        exec('php '.__DIR__."/../http-status-check scan http://localhost:8080 -x > {$this->consoleLog}");
 
         $this->appearsInConsoleOutput([
             'Start scanning http://localhost:8080',
