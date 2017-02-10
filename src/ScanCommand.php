@@ -3,6 +3,7 @@
 namespace Spatie\HttpStatusCheck;
 
 use Spatie\Crawler\Crawler;
+use GuzzleHttp\RequestOptions;
 use Spatie\Crawler\CrawlAllUrls;
 use Spatie\Crawler\CrawlInternalUrls;
 use Symfony\Component\Console\Command\Command;
@@ -41,6 +42,13 @@ class ScanCommand extends Command
                 'x',
                 InputOption::VALUE_NONE,
                 'Dont crawl external links'
+            )
+            ->addOption(
+                'timeout',
+                't',
+                InputOption::VALUE_OPTIONAL,
+                'The maximum number of seconds the request can take',
+                10
             );
     }
 
@@ -80,7 +88,7 @@ class ScanCommand extends Command
             $crawlLogger->setOutputFile($input->getOption('output'));
         }
 
-        Crawler::create()
+        Crawler::create([RequestOptions::TIMEOUT => $input->getOption('timeout')])
             ->setConcurrency($input->getOption('concurrency'))
             ->setCrawlObserver($crawlLogger)
             ->setCrawlProfile($crawlProfile)
