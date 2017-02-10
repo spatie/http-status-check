@@ -59,6 +59,12 @@ When the crawler finds a link to an external site it will by default crawl that 
 http-status-check scan https://example.com --dont-crawl-external-links
 ```
 
+By default requests timeout after 10 seconds. You can change this by passing a number of seconds to the `timeout`-option.
+
+```bash
+http-status-check scan https://example.com --timeout=30
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
