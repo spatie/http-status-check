@@ -2,8 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use GuzzleHttp\RequestOptions;
 use Spatie\Crawler\Crawler;
+use GuzzleHttp\RequestOptions;
 use Spatie\Crawler\CrawlAllUrls;
 use Spatie\Crawler\CrawlInternalUrls;
 use Symfony\Component\Console\Command\Command;
