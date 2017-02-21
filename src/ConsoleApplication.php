@@ -10,7 +10,7 @@ class ConsoleApplication extends Application
     {
         error_reporting(-1);
 
-        parent::__construct('Http status check', '2.2.1');
+        parent::__construct('Http status check', '2.3.0');
 
         $this->add(new ScanCommand());
     }
