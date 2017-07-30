@@ -49,6 +49,27 @@ class ScanCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'The maximum number of seconds the request can take',
                 10
+            )
+            ->addOption(
+                'user-agent',
+                'u',
+                InputOption::VALUE_OPTIONAL,
+                'The User Agent to pass for the request',
+                ''
+            )
+            ->addOption(
+                'verify',
+                'v',
+                InputOption::VALUE_NONE,
+                'Describes the SSL certificate verification behavior of a request',
+                false
+            )
+            ->addOption(
+                'options',
+                'opt',
+                InputOption::VALUE_IS_ARRAY,
+                'Additional options to the request',
+                []
             );
     }
 
@@ -88,7 +109,13 @@ class ScanCommand extends Command
             $crawlLogger->setOutputFile($input->getOption('output'));
         }
 
-        Crawler::create([RequestOptions::TIMEOUT => $input->getOption('timeout')])
+        Crawler::create([
+            RequestOptions::TIMEOUT => $input->getOption('timeout'),
+            RequestOptions::VERIFY => $input->getOption('verify'),
+            $input->getOption('options'),
+            $input->getOption('user-agent'),
+            $input->getOption('options')
+        ])
             ->setConcurrency($input->getOption('concurrency'))
             ->setCrawlObserver($crawlLogger)
             ->setCrawlProfile($crawlProfile)
