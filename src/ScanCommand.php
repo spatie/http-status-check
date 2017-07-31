@@ -58,16 +58,15 @@ class ScanCommand extends Command
                 ''
             )
             ->addOption(
-                'verify',
-                'v',
+                'skip-verification',
+                's',
                 InputOption::VALUE_NONE,
-                'Describes the SSL certificate verification behavior of a request',
-                false
+                'Skips checking the SSL certificate'
             )
             ->addOption(
                 'options',
                 'opt',
-                InputOption::VALUE_IS_ARRAY,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Additional options to the request',
                 []
             );
@@ -109,13 +108,17 @@ class ScanCommand extends Command
             $crawlLogger->setOutputFile($input->getOption('output'));
         }
 
-        Crawler::create([
+        $clientOptions = [
             RequestOptions::TIMEOUT => $input->getOption('timeout'),
-            RequestOptions::VERIFY => $input->getOption('verify'),
-            $input->getOption('options'),
-            $input->getOption('user-agent'),
+            RequestOptions::VERIFY => !$input->getOption('skip-verify'),
             $input->getOption('options')
-        ])
+        ];
+
+        if ($input->getOption('user-agent')) {
+            $clientOptions[RequestOptions::HEADERS]['user-agent'] = $input->getOption('user-agent');
+        }
+
+        Crawler::create($clientOptions)
             ->setConcurrency($input->getOption('concurrency'))
             ->setCrawlObserver($crawlLogger)
             ->setCrawlProfile($crawlProfile)
