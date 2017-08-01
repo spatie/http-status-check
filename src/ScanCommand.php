@@ -111,7 +111,7 @@ class ScanCommand extends Command
         $clientOptions = [
             RequestOptions::TIMEOUT => $input->getOption('timeout'),
             RequestOptions::VERIFY => ! $input->getOption('skip-verify'),
-            $input->getOption('options')
+            $input->getOption('options'),
         ];
 
         if ($input->getOption('user-agent')) {
