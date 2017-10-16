@@ -1,6 +1,9 @@
 # Changelog
 
-All Notable changes to `spatie/http-status-check` will be documented in this file.
+All notable changes to `spatie/http-status-check` will be documented in this file.
+
+## 2.4.0 - 2017-10-16
+- added some command line arguments
 
 ## 2.3.0 - 2017-02-01
 - add `timout` option
