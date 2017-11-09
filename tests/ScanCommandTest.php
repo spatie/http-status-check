@@ -2,9 +2,9 @@
 
 namespace Spatie\HttpStatusCheck\Test;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ScanCommandTest extends PHPUnit_Framework_TestCase
+class ScanCommandTest extends TestCase
 {
     /** @var string */
     protected $consoleLog;
