@@ -2,8 +2,8 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
+use Psr\Http\Message\UriInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger implements CrawlObserver
