@@ -2,7 +2,7 @@
 
 namespace Spatie\HttpStatusCheck;
 
-use Spatie\Crawler\Url;
+use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -36,20 +36,20 @@ class CrawlLogger implements CrawlObserver
     /**
      * Called when the crawl will crawl the url.
      *
-     * @param \Spatie\Crawler\Url $url
+     * @param \Psr\Http\Message\UriInterface $url
      */
-    public function willCrawl(Url $url)
+    public function willCrawl(UriInterface $url)
     {
     }
 
     /**
      * Called when the crawler has crawled the given url.
      *
-     * @param \Spatie\Crawler\Url $url
+     * @param \Psr\Http\Message\UriInterface $url
      * @param \Psr\Http\Message\ResponseInterface|null $response
-     * @param \Spatie\Crawler\Url $foundOn
+     * @param \Psr\Http\Message\UriInterface $foundOn
      */
-    public function hasBeenCrawled(Url $url, $response, Url $foundOn = null)
+    public function hasBeenCrawled(UriInterface $url, $response, ?UriInterface $foundOn = null)
     {
         $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
 
