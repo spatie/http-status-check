@@ -2,6 +2,9 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 2.5.0 - 2017-12-22
+- added support for Symfony 4
+
 ## 2.4.0 - 2017-10-16
 - added some command line arguments
 
