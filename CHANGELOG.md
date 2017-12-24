@@ -2,6 +2,11 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.0.0 - 
+
+- PHP 7.1 required
+- update `spatie/crawler` to `^3.0`
+
 ## 2.5.0 - 2017-12-22
 - added support for Symfony 4
 
