@@ -42,13 +42,13 @@ You can also write all urls that gave a non-2xx or non-3xx response to a file:
 http-status-check scan https://example.com --output=log.txt
 ```
 
-When the crawler finds a link to an external site it will by default crawl that link as well. If you don't want to crawler to crawl such external urls use the `--dont-crawl-external-links` option
+When the crawler finds a link to an external site it will by default crawl that link as well. If you don't want the crawler to crawl such external urls use the `--dont-crawl-external-links` option
 
 ```bash
 http-status-check scan https://example.com --dont-crawl-external-links
 ```
 
-By default requests timeout after 10 seconds. You can change this by passing a number of seconds to the `timeout`-option.
+By default, requests timeout after 10 seconds. You can change this by passing the number of seconds to the `timeout`-option.
 
 ```bash
 http-status-check scan https://example.com --timeout=30
