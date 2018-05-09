@@ -2,7 +2,7 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
-## 3.1.0
+## 3.1.0 - 2018-05-09
 
 - Update crawler to `^4.1.0`.
 - Add `--ignore-robots` option.
