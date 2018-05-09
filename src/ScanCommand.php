@@ -132,7 +132,7 @@ class ScanCommand extends Command
             ->setCrawlProfile($crawlProfile);
 
         if ($input->getOption('ignore-robots')) {
-//            $crawler->
+            $crawler->ignoreRobots();
         }
 
         $crawler->startCrawling($baseUrl);
