@@ -2,11 +2,13 @@
 
 namespace Spatie\HttpStatusCheck;
 
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 use Spatie\Crawler\CrawlObserver;
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CrawlLogger implements CrawlObserver
+class CrawlLogger extends CrawlObserver
 {
     const UNRESPONSIVE_HOST = 'Host did not respond';
 
@@ -40,38 +42,6 @@ class CrawlLogger implements CrawlObserver
      */
     public function willCrawl(UriInterface $url)
     {
-    }
-
-    /**
-     * Called when the crawler has crawled the given url.
-     *
-     * @param \Psr\Http\Message\UriInterface $url
-     * @param \Psr\Http\Message\ResponseInterface|null $response
-     * @param \Psr\Http\Message\UriInterface $foundOn
-     */
-    public function hasBeenCrawled(UriInterface $url, $response, ?UriInterface $foundOn = null)
-    {
-        $statusCode = $response ? $response->getStatusCode() : self::UNRESPONSIVE_HOST;
-
-        $reason = $response ? $response->getReasonPhrase() : '';
-
-        $colorTag = $this->getColorTagForStatusCode($statusCode);
-
-        $timestamp = date('Y-m-d H:i:s');
-
-        $message = "{$statusCode} {$reason} - ".(string) $url;
-
-        if ($foundOn && $colorTag === 'error') {
-            $message .= " (found on {$foundOn})";
-        }
-
-        if ($this->outputFile && $colorTag === 'error') {
-            file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
-        }
-
-        $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
-
-        $this->crawledUrls[$statusCode][] = $url;
     }
 
     /**
@@ -140,5 +110,57 @@ class CrawlLogger implements CrawlObserver
     public function setOutputFile($filename)
     {
         $this->outputFile = $filename;
+    }
+
+    public function crawled(
+        UriInterface $url,
+        ResponseInterface $response,
+        ?UriInterface $foundOnUrl = null
+    ) {
+        $statusCode = $response->getStatusCode();
+
+        $reason = $response->getReasonPhrase();
+
+        $colorTag = $this->getColorTagForStatusCode($statusCode);
+
+        $timestamp = date('Y-m-d H:i:s');
+
+        $message = "{$statusCode} {$reason} - " . (string) $url;
+
+        if ($this->outputFile && $colorTag === 'error') {
+            file_put_contents($this->outputFile, $message . PHP_EOL, FILE_APPEND);
+        }
+
+        $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
+
+        $this->crawledUrls[$statusCode][] = $url;
+    }
+
+    public function crawlFailed(
+        UriInterface $url,
+        RequestException $requestException,
+        ?UriInterface $foundOnUrl = null
+    ) {
+        $statusCode = self::UNRESPONSIVE_HOST;
+
+        $reason = $requestException->getResponse()->getReasonPhrase();
+
+        $colorTag = $this->getColorTagForStatusCode($statusCode);
+
+        $timestamp = date('Y-m-d H:i:s');
+
+        $message = "{$statusCode} {$reason} - " . (string) $url;
+
+        if ($foundOnUrl) {
+            $message .= " (found on {$foundOnUrl})";
+        }
+
+        if ($this->outputFile) {
+            file_put_contents($this->outputFile, $message . PHP_EOL, FILE_APPEND);
+        }
+
+        $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
+
+        $this->crawledUrls[$statusCode][] = $url;
     }
 }
