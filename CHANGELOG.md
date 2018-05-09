@@ -2,6 +2,11 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.1.0
+
+- Update crawler to `^4.1.0`.
+- Add `--ignore-robots` option.
+
 ## 3.0.0 - 2017-12-24
 
 - PHP 7.1 required

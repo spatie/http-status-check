@@ -54,6 +54,12 @@ By default, requests timeout after 10 seconds. You can change this by passing th
 http-status-check scan https://example.com --timeout=30
 ```
 
+By default, the crawler will respect robots data. You can ignore them though with the `--ignore-robots` option.
+
+```bash
+http-status-check scan https://example.com --ignore-robots
+```
+
 ## Testing
 
 To run the tests you'll have to start the included node based server first in a separate terminal window.

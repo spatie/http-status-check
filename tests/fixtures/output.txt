@@ -1,1 +1,1 @@
-404 Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)
+Host did not respond: Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)

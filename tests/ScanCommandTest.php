@@ -35,11 +35,11 @@ class ScanCommandTest extends TestCase
             '302 Found - http://localhost:8080/link4',
             '200 OK - http://example.com/',
             '200 OK - http://localhost:8080/link3',
-            '404 Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
+            'Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
             'Crawling summary',
             'Crawled 5 url(s) with statuscode 200',
             'Crawled 1 url(s) with statuscode 302',
-            'Crawled 1 url(s) with statuscode 404',
+            '1 url(s) did have unresponsive host(s)',
         ]);
     }
 
@@ -55,11 +55,11 @@ class ScanCommandTest extends TestCase
             '200 OK - http://localhost:8080/link2',
             '302 Found - http://localhost:8080/link4',
             '200 OK - http://localhost:8080/link3',
-            '404 Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
+            'Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
             'Crawling summary',
             'Crawled 4 url(s) with statuscode 200',
             'Crawled 1 url(s) with statuscode 302',
-            'Crawled 1 url(s) with statuscode 404',
+            '1 url(s) did have unresponsive host(s)',
         ]);
     }
 
