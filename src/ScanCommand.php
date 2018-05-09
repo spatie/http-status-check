@@ -69,6 +69,12 @@ class ScanCommand extends Command
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Additional options to the request',
                 []
+            )
+            ->addOption(
+                'ignore-robots',
+                null,
+                InputOption::VALUE_NONE,
+                'Ignore robots checks'
             );
     }
 
@@ -120,11 +126,16 @@ class ScanCommand extends Command
             $clientOptions[RequestOptions::HEADERS]['user-agent'] = $input->getOption('user-agent');
         }
 
-        Crawler::create($clientOptions)
+        $crawler = Crawler::create($clientOptions)
             ->setConcurrency($input->getOption('concurrency'))
             ->setCrawlObserver($crawlLogger)
-            ->setCrawlProfile($crawlProfile)
-            ->startCrawling($baseUrl);
+            ->setCrawlProfile($crawlProfile);
+
+        if ($input->getOption('ignore-robots')) {
+//            $crawler->
+        }
+
+        $crawler->startCrawling($baseUrl);
 
         return 0;
     }
