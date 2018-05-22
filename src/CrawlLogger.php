@@ -125,10 +125,10 @@ class CrawlLogger extends CrawlObserver
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = "{$statusCode} {$reason} - ".(string) $url;
+        $message = "{$statusCode} {$reason} - " . (string) $url;
 
         if ($this->outputFile && $colorTag === 'error') {
-            file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
+            file_put_contents($this->outputFile, $message . PHP_EOL, FILE_APPEND);
         }
 
         $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
@@ -143,20 +143,22 @@ class CrawlLogger extends CrawlObserver
     ) {
         $statusCode = self::UNRESPONSIVE_HOST;
 
-        $reason = $requestException->getResponse()->getReasonPhrase();
+        $reason = $requestException->getResponse()
+            ? $requestException->getResponse()->getReasonPhrase()
+            : $requestException->getMessage();
 
         $colorTag = $this->getColorTagForStatusCode($statusCode);
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = "{$statusCode}: {$reason} - ".(string) $url;
+        $message = "{$statusCode}: {$reason} - " . (string) $url;
 
         if ($foundOnUrl) {
             $message .= " (found on {$foundOnUrl})";
         }
 
         if ($this->outputFile) {
-            file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
+            file_put_contents($this->outputFile, $message . PHP_EOL, FILE_APPEND);
         }
 
         $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");

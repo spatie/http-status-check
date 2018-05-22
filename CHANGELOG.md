@@ -2,6 +2,10 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.1.1 - 2018-05-22
+
+- Add an extra null check when a request fails to determine the message.
+
 ## 3.1.0 - 2018-05-09
 
 - Update crawler to `^4.1.0`.
