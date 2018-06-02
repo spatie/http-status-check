@@ -10,6 +10,8 @@ This repository provides a tool to check the HTTP status code of every link on a
 
 ## Installation
 
+This package can be installed via Composer:
+
 ``` bash
 composer global require spatie/http-status-check
 ```
