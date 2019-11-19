@@ -2,6 +2,10 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.1.2 - 2019-11-19
+
+- allow symfony 5 components
+
 ## 3.1.1 - 2018-05-22
 
 - Add an extra null check when a request fails to determine the message.
