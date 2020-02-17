@@ -83,7 +83,7 @@ class ScanCommandTest extends TestCase
         }
 
         exec('php '.__DIR__."/../http-status-check scan --csv {$this->outputFile} http://localhost:8080");
-        $expected=[
+        $expected = [
             '200,OK,http://localhost:8080/,',
             '200,OK,http://localhost:8080/link1,http://localhost:8080/',
             '200,OK,http://localhost:8080/link2,http://localhost:8080/',
@@ -92,12 +92,11 @@ class ScanCommandTest extends TestCase
             '200,OK,http://example.com/,http://localhost:8080/link1',
             '404,"Not Found",http://localhost:8080/notExists,http://localhost:8080/link3',
         ];
-        $actual=file_get_contents($this->outputFile);
-        foreach($expected as $expecting){
+        $actual = file_get_contents($this->outputFile);
+        foreach ($expected as $expecting) {
             $this->assertEquals(1, substr_count($actual, $expecting), "Did not find `{$expecting}` in the log");
         }
     }
-
 
     /**
      * @param string|array $texts

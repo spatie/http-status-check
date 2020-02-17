@@ -54,7 +54,7 @@ class CrawlLogger extends CrawlObserver
      */
     public function finishedCrawling()
     {
-        if($this->csvFile){
+        if ($this->csvFile) {
             fclose($this->csvFile);
         }
 
@@ -128,7 +128,7 @@ class CrawlLogger extends CrawlObserver
      */
     public function setCsvFile($filename)
     {
-        $this->csvFile = fopen($filename,'w');
+        $this->csvFile = fopen($filename, 'w');
     }
 
     public function crawled(
@@ -151,7 +151,7 @@ class CrawlLogger extends CrawlObserver
         }
 
         if ($this->csvFile) {
-            fputcsv($this->csvFile, [$timestamp, $statusCode, $reason, (string)$url, (string)$foundOnUrl]);
+            fputcsv($this->csvFile, [$timestamp, $statusCode, $reason, (string) $url, (string) $foundOnUrl]);
         }
 
         $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
@@ -187,7 +187,7 @@ class CrawlLogger extends CrawlObserver
         }
 
         if ($this->csvFile) {
-            fputcsv($this->csvFile, [$timestamp, $statusCode, $reason, (string)$url, (string)$foundOnUrl]);
+            fputcsv($this->csvFile, [$timestamp, $statusCode, $reason, (string) $url, (string) $foundOnUrl]);
         }
 
         $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
