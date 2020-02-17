@@ -141,7 +141,9 @@ class CrawlLogger extends CrawlObserver
         RequestException $requestException,
         ?UriInterface $foundOnUrl = null
     ) {
-        $statusCode = self::UNRESPONSIVE_HOST;
+        $statusCode = $requestException->getResponse()
+            ? $requestException->getResponse()->getStatusCode()
+            : self::UNRESPONSIVE_HOST;
 
         $reason = $requestException->getResponse()
             ? $requestException->getResponse()->getReasonPhrase()
