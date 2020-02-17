@@ -96,7 +96,8 @@ class ScanCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_removes_output_file_on_overrite() {
+    public function it_removes_output_file_on_overrite()
+    {
         $application = new Application();
         $application->add(new ScanCommand());
 
@@ -107,17 +108,17 @@ class ScanCommandTest extends TestCase
         $commandTester->setInputs(['y']);
         $commandTester->execute([
             'url'      =>  'http://localhost:8080',
-            '--output' =>  $this->overriteFile
+            '--output' =>  $this->overriteFile,
         ]);
 
-        $this->assertfileequals(__dir__.'/fixtures/overrite.txt', $this->overriteFile);
+        $this->assertfileequals(__DIR__.'/fixtures/overrite.txt', $this->overriteFile);
 
         $commandTester->setInputs(['y']);
         $commandTester->execute([
             'url'      =>  'http://localhost:8080',
-            '--output' =>  $this->overriteFile
+            '--output' =>  $this->overriteFile,
         ]);
 
-        $this->assertfileequals(__dir__.'/fixtures/overrite.txt', $this->overriteFile);
+        $this->assertfileequals(__DIR__.'/fixtures/overrite.txt', $this->overriteFile);
     }
 }
