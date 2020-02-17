@@ -2,6 +2,10 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.1.3 - 2020-02-16
+
+- use response status code if available (#59)
+
 ## 3.1.2 - 2019-11-19
 
 - allow symfony 5 components
