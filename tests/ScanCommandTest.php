@@ -75,6 +75,30 @@ class ScanCommandTest extends TestCase
         $this->assertFileEquals(__DIR__.'/fixtures/output.txt', $this->outputFile);
     }
 
+    /** @test */
+    public function it_can_write_urls_to_a_csv_output_file()
+    {
+        if (file_exists($this->outputFile)) {
+            unlink($this->outputFile);
+        }
+
+        exec('php '.__DIR__."/../http-status-check scan --csv {$this->outputFile} http://localhost:8080");
+        $expected=[
+            '200,OK,http://localhost:8080/,',
+            '200,OK,http://localhost:8080/link1,http://localhost:8080/',
+            '200,OK,http://localhost:8080/link2,http://localhost:8080/',
+            '302,Found,http://localhost:8080/link4,http://localhost:8080/',
+            '200,OK,http://localhost:8080/link3,http://localhost:8080/link2',
+            '200,OK,http://example.com/,http://localhost:8080/link1',
+            '404,"Not Found",http://localhost:8080/notExists,http://localhost:8080/link3',
+        ];
+        $actual=file_get_contents($this->outputFile);
+        foreach($expected as $expecting){
+            $this->assertEquals(1, substr_count($actual, $expecting), "Did not find `{$expecting}` in the log");
+        }
+    }
+
+
     /**
      * @param string|array $texts
      */
