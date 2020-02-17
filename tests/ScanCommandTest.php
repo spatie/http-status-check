@@ -39,7 +39,7 @@ class ScanCommandTest extends TestCase
             'Crawling summary',
             'Crawled 5 url(s) with statuscode 200',
             'Crawled 1 url(s) with statuscode 302',
-            '1 url(s) did have unresponsive host(s)',
+            'Crawled 1 url(s) with statuscode 404',
         ]);
     }
 
@@ -59,7 +59,7 @@ class ScanCommandTest extends TestCase
             'Crawling summary',
             'Crawled 4 url(s) with statuscode 200',
             'Crawled 1 url(s) with statuscode 302',
-            '1 url(s) did have unresponsive host(s)',
+            'Crawled 1 url(s) with statuscode 404',
         ]);
     }
 
