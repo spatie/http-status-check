@@ -3,6 +3,9 @@
 namespace Spatie\HttpStatusCheck\Test;
 
 use PHPUnit\Framework\TestCase;
+use Spatie\HttpStatusCheck\ScanCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class ScanCommandTest extends TestCase
 {
@@ -18,6 +21,7 @@ class ScanCommandTest extends TestCase
 
         $this->consoleLog = __DIR__.'/temp/consoleLog.txt';
         $this->outputFile = __DIR__.'/temp/outputFile.txt';
+        $this->overriteFile = __DIR__.'/temp/overriteFile.txt';
 
         file_put_contents($this->consoleLog, PHP_EOL);
     }
@@ -39,7 +43,7 @@ class ScanCommandTest extends TestCase
             'Crawling summary',
             'Crawled 5 url(s) with statuscode 200',
             'Crawled 1 url(s) with statuscode 302',
-            '1 url(s) did have unresponsive host(s)',
+            'Crawled 1 url(s) with statuscode 404',
         ]);
     }
 
@@ -59,7 +63,7 @@ class ScanCommandTest extends TestCase
             'Crawling summary',
             'Crawled 4 url(s) with statuscode 200',
             'Crawled 1 url(s) with statuscode 302',
-            '1 url(s) did have unresponsive host(s)',
+            'Crawled 1 url(s) with statuscode 404',
         ]);
     }
 
@@ -89,5 +93,31 @@ class ScanCommandTest extends TestCase
 
             $this->assertEquals(1, substr_count($consoleLogContent, $text.PHP_EOL), "Did not find `{$text}` in the log");
         }
+    }
+
+    /** @test */
+    public function it_removes_output_file_on_overrite() {
+        $application = new Application();
+        $application->add(new ScanCommand());
+
+        $command = $application->find('scan');
+        $commandTester = new CommandTester($command);
+        $helper = $command->getHelper('question');
+
+        $commandTester->setInputs(['y']);
+        $commandTester->execute([
+            'url'      =>  'http://localhost:8080',
+            '--output' =>  $this->overriteFile
+        ]);
+
+        $this->assertfileequals(__dir__.'/fixtures/overrite.txt', $this->overriteFile);
+
+        $commandTester->setInputs(['y']);
+        $commandTester->execute([
+            'url'      =>  'http://localhost:8080',
+            '--output' =>  $this->overriteFile
+        ]);
+
+        $this->assertfileequals(__dir__.'/fixtures/overrite.txt', $this->overriteFile);
     }
 }
