@@ -21,7 +21,7 @@ class ScanCommandTest extends TestCase
 
         $this->consoleLog = __DIR__.'/temp/consoleLog.txt';
         $this->outputFile = __DIR__.'/temp/outputFile.txt';
-        $this->overriteFile = __DIR__.'/temp/overriteFile.txt';
+        $this->overwriteFile = __DIR__.'/temp/overwriteFile.txt';
 
         file_put_contents($this->consoleLog, PHP_EOL);
     }
@@ -96,7 +96,8 @@ class ScanCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_removes_output_file_on_overrite() {
+    public function it_removes_output_file_on_overwrite()
+    {
         $application = new Application();
         $application->add(new ScanCommand());
 
@@ -107,17 +108,17 @@ class ScanCommandTest extends TestCase
         $commandTester->setInputs(['y']);
         $commandTester->execute([
             'url'      =>  'http://localhost:8080',
-            '--output' =>  $this->overriteFile
+            '--output' =>  $this->overwriteFile,
         ]);
 
-        $this->assertfileequals(__dir__.'/fixtures/overrite.txt', $this->overriteFile);
+        $this->assertFileEquals(__DIR__.'/fixtures/overwrite.txt', $this->overwriteFile);
 
         $commandTester->setInputs(['y']);
         $commandTester->execute([
             'url'      =>  'http://localhost:8080',
-            '--output' =>  $this->overriteFile
+            '--output' =>  $this->overwriteFile,
         ]);
 
-        $this->assertfileequals(__dir__.'/fixtures/overrite.txt', $this->overriteFile);
+        $this->assertFileEquals(__DIR__.'/fixtures/overwrite.txt', $this->overwriteFile);
     }
 }
