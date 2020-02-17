@@ -78,7 +78,6 @@ class ScanCommandTest extends TestCase
         ]);
     }
 
-
     /** @test */
     public function it_can_write_urls_with_errors_to_an_output_file()
     {
