@@ -42,8 +42,8 @@ class ScanCommandTest extends TestCase
             'Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
             'Crawling summary',
             'Crawled 5 url(s) with statuscode 200',
-            'Crawled 1 url(s) with statuscode 302',
-            'Crawled 1 url(s) with statuscode 404',
+            'Crawled 2 url(s) with statuscode 302',
+            'Crawled 2 url(s) with statuscode 404',
         ]);
     }
 
@@ -62,8 +62,8 @@ class ScanCommandTest extends TestCase
             'Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
             'Crawling summary',
             'Crawled 4 url(s) with statuscode 200',
-            'Crawled 1 url(s) with statuscode 302',
-            'Crawled 1 url(s) with statuscode 404',
+            'Crawled 2 url(s) with statuscode 302',
+            'Crawled 2 url(s) with statuscode 404',
         ]);
     }
 
