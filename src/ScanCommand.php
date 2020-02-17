@@ -38,6 +38,12 @@ class ScanCommand extends Command
                 'Log all non-2xx and non-3xx responses in this file'
             )
             ->addOption(
+                'csv',
+                'f',
+                InputOption::VALUE_REQUIRED,
+                'Log all responses in this csv file'
+            )
+            ->addOption(
                 'dont-crawl-external-links',
                 'x',
                 InputOption::VALUE_NONE,
@@ -112,6 +118,26 @@ class ScanCommand extends Command
             }
 
             $crawlLogger->setOutputFile($input->getOption('output'));
+        }
+
+        if ($input->getOption('csv')) {
+            $csvFile = $input->getOption('csv');
+
+            if (file_exists($csvFile)) {
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion(
+                    "The csv file `{$csvFile}` already exists. Overwrite it? (y/n)",
+                    false
+                );
+
+                if (! $helper->ask($input, $output, $question)) {
+                    $output->writeln('Aborting...');
+
+                    return 0;
+                }
+            }
+
+            $crawlLogger->setCsvFile($input->getOption('csv'));
         }
 
         $clientOptions = [

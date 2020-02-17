@@ -28,6 +28,11 @@ class CrawlLogger extends CrawlObserver
     protected $outputFile = null;
 
     /**
+     * @var resource|null
+     */
+    protected $csvFile = null;
+
+    /**
      * @param \Symfony\Component\Console\Output\OutputInterface $consoleOutput
      */
     public function __construct(OutputInterface $consoleOutput)
@@ -49,6 +54,10 @@ class CrawlLogger extends CrawlObserver
      */
     public function finishedCrawling()
     {
+        if($this->csvFile){
+            fclose($this->csvFile);
+        }
+
         $this->consoleOutput->writeln('');
         $this->consoleOutput->writeln('Crawling summary');
         $this->consoleOutput->writeln('----------------');
@@ -112,6 +121,16 @@ class CrawlLogger extends CrawlObserver
         $this->outputFile = $filename;
     }
 
+    /**
+     * Set the filename (and open the file) to write the csv log.
+     *
+     * @param string $filename
+     */
+    public function setCsvFile($filename)
+    {
+        $this->csvFile = fopen($filename,'w');
+    }
+
     public function crawled(
         UriInterface $url,
         ResponseInterface $response,
@@ -129,6 +148,10 @@ class CrawlLogger extends CrawlObserver
 
         if ($this->outputFile && $colorTag === 'error') {
             file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
+        }
+
+        if ($this->csvFile) {
+            fputcsv($this->csvFile, [$timestamp, $statusCode, $reason, (string)$url, (string)$foundOnUrl]);
         }
 
         $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
@@ -161,6 +184,10 @@ class CrawlLogger extends CrawlObserver
 
         if ($this->outputFile) {
             file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
+        }
+
+        if ($this->csvFile) {
+            fputcsv($this->csvFile, [$timestamp, $statusCode, $reason, (string)$url, (string)$foundOnUrl]);
         }
 
         $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
