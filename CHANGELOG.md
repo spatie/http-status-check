@@ -2,6 +2,10 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.1.4 - 2020-02-18
+
+- fix for overwriting a file
+
 ## 3.1.3 - 2020-02-16
 
 - use response status code if available (#59)
