@@ -3,6 +3,9 @@
 namespace Spatie\HttpStatusCheck\Test;
 
 use PHPUnit\Framework\TestCase;
+use Spatie\HttpStatusCheck\ScanCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class ScanCommandTest extends TestCase
 {
@@ -18,6 +21,7 @@ class ScanCommandTest extends TestCase
 
         $this->consoleLog = __DIR__.'/temp/consoleLog.txt';
         $this->outputFile = __DIR__.'/temp/outputFile.txt';
+        $this->overwriteFile = __DIR__.'/temp/overwriteFile.txt';
 
         file_put_contents($this->consoleLog, PHP_EOL);
     }
@@ -89,5 +93,32 @@ class ScanCommandTest extends TestCase
 
             $this->assertEquals(1, substr_count($consoleLogContent, $text.PHP_EOL), "Did not find `{$text}` in the log");
         }
+    }
+
+    /** @test */
+    public function it_removes_output_file_on_overwrite()
+    {
+        $application = new Application();
+        $application->add(new ScanCommand());
+
+        $command = $application->find('scan');
+        $commandTester = new CommandTester($command);
+        $helper = $command->getHelper('question');
+
+        $commandTester->setInputs(['y']);
+        $commandTester->execute([
+            'url'      =>  'http://localhost:8080',
+            '--output' =>  $this->overwriteFile,
+        ]);
+
+        $this->assertFileEquals(__DIR__.'/fixtures/overwrite.txt', $this->overwriteFile);
+
+        $commandTester->setInputs(['y']);
+        $commandTester->execute([
+            'url'      =>  'http://localhost:8080',
+            '--output' =>  $this->overwriteFile,
+        ]);
+
+        $this->assertFileEquals(__DIR__.'/fixtures/overwrite.txt', $this->overwriteFile);
     }
 }

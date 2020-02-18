@@ -109,6 +109,8 @@ class ScanCommand extends Command
 
                     return 0;
                 }
+
+                unlink($outputFile);
             }
 
             $crawlLogger->setOutputFile($input->getOption('output'));
