@@ -118,22 +118,8 @@ class CrawlLogger extends CrawlObserver
         ?UriInterface $foundOnUrl = null
     ) {
         $statusCode = $response->getStatusCode();
-
         $reason = $response->getReasonPhrase();
-
-        $colorTag = $this->getColorTagForStatusCode($statusCode);
-
-        $timestamp = date('Y-m-d H:i:s');
-
-        $message = "{$statusCode} {$reason} - ".(string) $url;
-
-        if ($this->outputFile && $colorTag === 'error') {
-            file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
-        }
-
-        $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
-
-        $this->crawledUrls[$statusCode][] = $url;
+        $this->addResult((String)$url,(string)$foundOnUrl,$statusCode,$reason);
     }
 
     public function crawlFailed(
@@ -141,25 +127,25 @@ class CrawlLogger extends CrawlObserver
         RequestException $requestException,
         ?UriInterface $foundOnUrl = null
     ) {
-        $statusCode = $requestException->getResponse()
-            ? $requestException->getResponse()->getStatusCode()
-            : self::UNRESPONSIVE_HOST;
+        if( $response=$requestException->getResponse() ){
+            $this->crawled($url,$response,$foundOnUrl);
+        }else{
+            $this->addResult((String)$url,(string)$foundOnUrl,'---',self::UNRESPONSIVE_HOST);
+        }
+    }
 
-        $reason = $requestException->getResponse()
-            ? $requestException->getResponse()->getReasonPhrase()
-            : $requestException->getMessage();
-
+    public function addResult($url, $foundOnUrl, $statusCode, $reason){
         $colorTag = $this->getColorTagForStatusCode($statusCode);
 
         $timestamp = date('Y-m-d H:i:s');
 
-        $message = "{$statusCode}: {$reason} - ".(string) $url;
+        $message = "{$statusCode} {$reason} - ".(string) $url;
 
         if ($foundOnUrl) {
             $message .= " (found on {$foundOnUrl})";
         }
 
-        if ($this->outputFile) {
+        if ($this->outputFile && $colorTag === 'error') {
             file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
         }
 
