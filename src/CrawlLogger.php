@@ -118,14 +118,14 @@ class CrawlLogger extends CrawlObserver
         ?UriInterface $foundOnUrl = null
     ) {
         // https://github.com/guzzle/guzzle/blob/master/docs/faq.rst#how-can-i-track-redirected-requests
-        if($response->getHeader('X-Guzzle-Redirect-History')){
+        if ($response->getHeader('X-Guzzle-Redirect-History')) {
             // Retrieve both Redirect History headers
             $fullRedirectReport = [];
             // Retrieve both Redirect History headers
             $redirectUriHistory = $response->getHeader('X-Guzzle-Redirect-History'); // retrieve Redirect URI history
             $redirectCodeHistory = $response->getHeader('X-Guzzle-Redirect-Status-History'); // retrieve Redirect HTTP Status history
             // Add the initial URI requested to the (beginning of) URI history
-            array_unshift($redirectUriHistory, (string)$url);
+            array_unshift($redirectUriHistory, (string) $url);
             // Add the final HTTP status code to the end of HTTP response history
             array_push($redirectCodeHistory, $response->getStatusCode());
             $fullRedirectReport = [];
@@ -133,18 +133,18 @@ class CrawlLogger extends CrawlObserver
                 $fullRedirectReport[$key] = ['location' => $value, 'code' => $redirectCodeHistory[$key]];
             }
 
-            foreach($fullRedirectReport as $k=>$redirect){
+            foreach ($fullRedirectReport as $k=>$redirect) {
                 $this->addResult(
-                    (String)$redirect['location'],
-                    (string)$foundOnUrl,
+                    (string) $redirect['location'],
+                    (string) $foundOnUrl,
                     $redirect['code'],
                     $response->getReasonPhrase()
                 );
             }
-        }else{
+        } else {
             $this->addResult(
-                (String)$url,
-                (string)$foundOnUrl,
+                (string) $url,
+                (string) $foundOnUrl,
                 $response->getStatusCode(),
                 $response->getReasonPhrase()
             );
@@ -156,14 +156,15 @@ class CrawlLogger extends CrawlObserver
         RequestException $requestException,
         ?UriInterface $foundOnUrl = null
     ) {
-        if( $response=$requestException->getResponse() ){
-            $this->crawled($url,$response,$foundOnUrl);
-        }else{
-            $this->addResult((String)$url,(string)$foundOnUrl,'---',self::UNRESPONSIVE_HOST);
+        if ($response = $requestException->getResponse()) {
+            $this->crawled($url, $response, $foundOnUrl);
+        } else {
+            $this->addResult((string) $url, (string) $foundOnUrl, '---', self::UNRESPONSIVE_HOST);
         }
     }
 
-    public function addResult($url, $foundOnUrl, $statusCode, $reason){
+    public function addResult($url, $foundOnUrl, $statusCode, $reason)
+    {
         $colorTag = $this->getColorTagForStatusCode($statusCode);
 
         $timestamp = date('Y-m-d H:i:s');
