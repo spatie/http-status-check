@@ -138,7 +138,7 @@ class CrawlLogger extends CrawlObserver
                     (String)$redirect['location'],
                     (string)$foundOnUrl,
                     $redirect['code'],
-                    ''
+                    $response->getReasonPhrase()
                 );
             }
         }else{
@@ -146,7 +146,7 @@ class CrawlLogger extends CrawlObserver
                 (String)$url,
                 (string)$foundOnUrl,
                 $response->getStatusCode(),
-                ''
+                $response->getReasonPhrase()
             );
         }
     }
@@ -170,7 +170,7 @@ class CrawlLogger extends CrawlObserver
 
         $message = "{$statusCode} {$reason} - ".(string) $url;
 
-        if ($foundOnUrl) {
+        if ($foundOnUrl && $colorTag === 'error') {
             $message .= " (found on {$foundOnUrl})";
         }
 
