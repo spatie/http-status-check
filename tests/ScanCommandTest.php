@@ -36,7 +36,7 @@ class ScanCommandTest extends TestCase
             '200 OK - http://localhost:8080/',
             '200 OK - http://localhost:8080/link1',
             '200 OK - http://localhost:8080/link2',
-            '302 Found - http://localhost:8080/link4',
+            '302 Redirect - http://localhost:8080/link4',
             '200 OK - http://example.com/',
             '200 OK - http://localhost:8080/link3',
             'Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
@@ -57,7 +57,7 @@ class ScanCommandTest extends TestCase
             '200 OK - http://localhost:8080/',
             '200 OK - http://localhost:8080/link1',
             '200 OK - http://localhost:8080/link2',
-            '302 Found - http://localhost:8080/link4',
+            '302 Redirect - http://localhost:8080/link4',
             '200 OK - http://localhost:8080/link3',
             'Not Found - http://localhost:8080/notExists (found on http://localhost:8080/link3)',
             'Crawling summary',
@@ -102,7 +102,7 @@ class ScanCommandTest extends TestCase
         foreach ($texts as $text) {
             $consoleLogContent = file_get_contents($this->consoleLog);
 
-            $this->assertEquals(1, substr_count($consoleLogContent, $text), "Did not find `{$text}` in the log {$consoleLogContent}");
+            $this->assertGreaterThan(0, substr_count($consoleLogContent, $text), "Did not find `{$text}` in the log: {$consoleLogContent}");
         }
     }
 
