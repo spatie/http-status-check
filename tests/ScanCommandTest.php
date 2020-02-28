@@ -102,7 +102,7 @@ class ScanCommandTest extends TestCase
         foreach ($texts as $text) {
             $consoleLogContent = file_get_contents($this->consoleLog);
 
-            $this->assertGreaterThan(0, substr_count($consoleLogContent, $text), "Did not find `{$text}` in the log: {$consoleLogContent}");
+            $this->assertEquals(1, substr_count($consoleLogContent, $text.PHP_EOL), "Did not find `{$text}` in the log");
         }
     }
 
