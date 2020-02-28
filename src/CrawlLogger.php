@@ -139,7 +139,7 @@ class CrawlLogger extends CrawlObserver
                     (string) $redirect['location'],
                     (string) $foundOnUrl,
                     $redirect['code'],
-                    $k+1==count($fullRedirectReport) ? $response->getReasonPhrase() : self::REDIRECT
+                    $k + 1 == count($fullRedirectReport) ? $response->getReasonPhrase() : self::REDIRECT
                 );
             }
         } else {
@@ -168,7 +168,7 @@ class CrawlLogger extends CrawlObserver
     {
         // done display duplicate results
         // this happens if a redirect if a redirect is followed to a page
-        if( isset($this->crawledUrls[$statusCode]) && in_array($url, $this->crawledUrls[$statusCode]) ){
+        if (isset($this->crawledUrls[$statusCode]) && in_array($url, $this->crawledUrls[$statusCode])) {
             return;
         }
 
