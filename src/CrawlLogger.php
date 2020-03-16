@@ -118,38 +118,18 @@ class CrawlLogger extends CrawlObserver
         ResponseInterface $response,
         ?UriInterface $foundOnUrl = null
     ) {
-        // https://github.com/guzzle/guzzle/blob/master/docs/faq.rst#how-can-i-track-redirected-requests
-        if ($response->getHeader('X-Guzzle-Redirect-History')) {
-            // Retrieve both Redirect History headers
-            $fullRedirectReport = [];
-            // Retrieve both Redirect History headers
-            $redirectUriHistory = $response->getHeader('X-Guzzle-Redirect-History'); // retrieve Redirect URI history
-            $redirectCodeHistory = $response->getHeader('X-Guzzle-Redirect-Status-History'); // retrieve Redirect HTTP Status history
-            // Add the initial URI requested to the (beginning of) URI history
-            array_unshift($redirectUriHistory, (string) $url);
-            // Add the final HTTP status code to the end of HTTP response history
-            array_push($redirectCodeHistory, $response->getStatusCode());
-            $fullRedirectReport = [];
-            foreach ($redirectUriHistory as $key => $value) {
-                $fullRedirectReport[$key] = ['location' => $value, 'code' => $redirectCodeHistory[$key]];
-            }
 
-            foreach ($fullRedirectReport as $k=>$redirect) {
-                $this->addResult(
-                    (string) $redirect['location'],
-                    (string) $foundOnUrl,
-                    $redirect['code'],
-                    $k + 1 == count($fullRedirectReport) ? $response->getReasonPhrase() : self::REDIRECT
-                );
-            }
-        } else {
-            $this->addResult(
-                (string) $url,
-                (string) $foundOnUrl,
-                $response->getStatusCode(),
-                $response->getReasonPhrase()
-            );
+        if($this->addRedirectedResult($url, $response, $foundOnUrl)){
+            return;
         }
+
+        // response wasnt a redirect so lets add it as a standard result
+        $this->addResult(
+            (string) $url,
+            (string) $foundOnUrl,
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        );
     }
 
     public function crawlFailed(
@@ -166,8 +146,10 @@ class CrawlLogger extends CrawlObserver
 
     public function addResult($url, $foundOnUrl, $statusCode, $reason)
     {
-        // done display duplicate results
-        // this happens if a redirect if a redirect is followed to a page
+        /*
+        * don't display duplicate results
+        * this happens if a redirect is followed to an existing page
+        */
         if (isset($this->crawledUrls[$statusCode]) && in_array($url, $this->crawledUrls[$statusCode])) {
             return;
         }
@@ -190,4 +172,49 @@ class CrawlLogger extends CrawlObserver
 
         $this->crawledUrls[$statusCode][] = $url;
     }
+
+    /*
+    * https://github.com/guzzle/guzzle/blob/master/docs/faq.rst#how-can-i-track-redirected-requests
+    */
+    public function addRedirectedResult(
+        UriInterface $url,
+        ResponseInterface $response,
+        ?UriInterface $foundOnUrl = null
+    ){
+        // if its not a redirect the return false
+        if (!$response->getHeader('X-Guzzle-Redirect-History')) {
+            return false;
+        }
+
+        // retrieve Redirect URI history
+        $redirectUriHistory = $response->getHeader('X-Guzzle-Redirect-History');
+
+        // retrieve Redirect HTTP Status history
+        $redirectCodeHistory = $response->getHeader('X-Guzzle-Redirect-Status-History');
+
+        // Add the initial URI requested to the (beginning of) URI history
+        array_unshift($redirectUriHistory, (string) $url);
+
+        // Add the final HTTP status code to the end of HTTP response history
+        array_push($redirectCodeHistory, $response->getStatusCode());
+
+        // Combine the items of each array into a single result set
+        $fullRedirectReport = [];
+        foreach ($redirectUriHistory as $key => $value) {
+            $fullRedirectReport[$key] = ['location' => $value, 'code' => $redirectCodeHistory[$key]];
+        }
+
+        // Add the redirects and final URL as results
+        foreach ($fullRedirectReport as $k=>$redirect) {
+            $this->addResult(
+                (string) $redirect['location'],
+                (string) $foundOnUrl,
+                $redirect['code'],
+                $k + 1 == count($fullRedirectReport) ? $response->getReasonPhrase() : self::REDIRECT
+            );
+        }
+
+        return true;
+    }
+
 }
