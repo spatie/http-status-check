@@ -118,8 +118,7 @@ class CrawlLogger extends CrawlObserver
         ResponseInterface $response,
         ?UriInterface $foundOnUrl = null
     ) {
-
-        if($this->addRedirectedResult($url, $response, $foundOnUrl)){
+        if ($this->addRedirectedResult($url, $response, $foundOnUrl)) {
             return;
         }
 
@@ -180,9 +179,9 @@ class CrawlLogger extends CrawlObserver
         UriInterface $url,
         ResponseInterface $response,
         ?UriInterface $foundOnUrl = null
-    ){
+    ) {
         // if its not a redirect the return false
-        if (!$response->getHeader('X-Guzzle-Redirect-History')) {
+        if (! $response->getHeader('X-Guzzle-Redirect-History')) {
             return false;
         }
 
@@ -216,5 +215,4 @@ class CrawlLogger extends CrawlObserver
 
         return true;
     }
-
 }
