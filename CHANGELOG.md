@@ -2,6 +2,10 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.2.0 - 2020-03-18
+
+- follow and log redirects as multiple responses (#66)
+
 ## 3.1.4 - 2020-02-18
 
 - fix for overwriting a file
