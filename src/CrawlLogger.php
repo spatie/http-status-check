@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CrawlLogger extends CrawlObserver
 {
     const UNRESPONSIVE_HOST = 'Host did not respond';
+    const REDIRECT = 'Redirect';
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
@@ -117,15 +118,50 @@ class CrawlLogger extends CrawlObserver
         ResponseInterface $response,
         ?UriInterface $foundOnUrl = null
     ) {
-        $statusCode = $response->getStatusCode();
+        if ($this->addRedirectedResult($url, $response, $foundOnUrl)) {
+            return;
+        }
 
-        $reason = $response->getReasonPhrase();
+        // response wasnt a redirect so lets add it as a standard result
+        $this->addResult(
+            (string) $url,
+            (string) $foundOnUrl,
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        );
+    }
+
+    public function crawlFailed(
+        UriInterface $url,
+        RequestException $requestException,
+        ?UriInterface $foundOnUrl = null
+    ) {
+        if ($response = $requestException->getResponse()) {
+            $this->crawled($url, $response, $foundOnUrl);
+        } else {
+            $this->addResult((string) $url, (string) $foundOnUrl, '---', self::UNRESPONSIVE_HOST);
+        }
+    }
+
+    public function addResult($url, $foundOnUrl, $statusCode, $reason)
+    {
+        /*
+        * don't display duplicate results
+        * this happens if a redirect is followed to an existing page
+        */
+        if (isset($this->crawledUrls[$statusCode]) && in_array($url, $this->crawledUrls[$statusCode])) {
+            return;
+        }
 
         $colorTag = $this->getColorTagForStatusCode($statusCode);
 
         $timestamp = date('Y-m-d H:i:s');
 
         $message = "{$statusCode} {$reason} - ".(string) $url;
+
+        if ($foundOnUrl && $colorTag === 'error') {
+            $message .= " (found on {$foundOnUrl})";
+        }
 
         if ($this->outputFile && $colorTag === 'error') {
             file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
@@ -136,35 +172,47 @@ class CrawlLogger extends CrawlObserver
         $this->crawledUrls[$statusCode][] = $url;
     }
 
-    public function crawlFailed(
+    /*
+    * https://github.com/guzzle/guzzle/blob/master/docs/faq.rst#how-can-i-track-redirected-requests
+    */
+    public function addRedirectedResult(
         UriInterface $url,
-        RequestException $requestException,
+        ResponseInterface $response,
         ?UriInterface $foundOnUrl = null
     ) {
-        $statusCode = $requestException->getResponse()
-            ? $requestException->getResponse()->getStatusCode()
-            : self::UNRESPONSIVE_HOST;
-
-        $reason = $requestException->getResponse()
-            ? $requestException->getResponse()->getReasonPhrase()
-            : $requestException->getMessage();
-
-        $colorTag = $this->getColorTagForStatusCode($statusCode);
-
-        $timestamp = date('Y-m-d H:i:s');
-
-        $message = "{$statusCode}: {$reason} - ".(string) $url;
-
-        if ($foundOnUrl) {
-            $message .= " (found on {$foundOnUrl})";
+        // if its not a redirect the return false
+        if (! $response->getHeader('X-Guzzle-Redirect-History')) {
+            return false;
         }
 
-        if ($this->outputFile) {
-            file_put_contents($this->outputFile, $message.PHP_EOL, FILE_APPEND);
+        // retrieve Redirect URI history
+        $redirectUriHistory = $response->getHeader('X-Guzzle-Redirect-History');
+
+        // retrieve Redirect HTTP Status history
+        $redirectCodeHistory = $response->getHeader('X-Guzzle-Redirect-Status-History');
+
+        // Add the initial URI requested to the (beginning of) URI history
+        array_unshift($redirectUriHistory, (string) $url);
+
+        // Add the final HTTP status code to the end of HTTP response history
+        array_push($redirectCodeHistory, $response->getStatusCode());
+
+        // Combine the items of each array into a single result set
+        $fullRedirectReport = [];
+        foreach ($redirectUriHistory as $key => $value) {
+            $fullRedirectReport[$key] = ['location' => $value, 'code' => $redirectCodeHistory[$key]];
         }
 
-        $this->consoleOutput->writeln("<{$colorTag}>[{$timestamp}] {$message}</{$colorTag}>");
+        // Add the redirects and final URL as results
+        foreach ($fullRedirectReport as $k=>$redirect) {
+            $this->addResult(
+                (string) $redirect['location'],
+                (string) $foundOnUrl,
+                $redirect['code'],
+                $k + 1 == count($fullRedirectReport) ? $response->getReasonPhrase() : self::REDIRECT
+            );
+        }
 
-        $this->crawledUrls[$statusCode][] = $url;
+        return true;
     }
 }

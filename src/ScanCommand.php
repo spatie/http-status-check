@@ -119,7 +119,9 @@ class ScanCommand extends Command
         $clientOptions = [
             RequestOptions::TIMEOUT => $input->getOption('timeout'),
             RequestOptions::VERIFY => ! $input->getOption('skip-verification'),
-            RequestOptions::ALLOW_REDIRECTS => false,
+            RequestOptions::ALLOW_REDIRECTS => [
+                'track_redirects' => true,
+            ],
         ];
 
         $clientOptions = array_merge($clientOptions, $input->getOption('options'));

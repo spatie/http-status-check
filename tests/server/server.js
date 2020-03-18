@@ -22,6 +22,10 @@ app.get('/link4', function (request, response) {
     response.redirect('/link1');
 });
 
+app.get('/redirectToNotFound', function (request, response) {
+    response.redirect('/notExists2');
+});
+
 let server = app.listen(8080, function () {
     const host = 'localhost';
     const port = server.address().port;
