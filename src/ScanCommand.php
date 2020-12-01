@@ -104,7 +104,7 @@ class ScanCommand extends Command
                     false
                 );
 
-                if (!$helper->ask($input, $output, $question)) {
+                if (! $helper->ask($input, $output, $question)) {
                     $output->writeln('Aborting...');
 
                     return 0;
@@ -117,8 +117,8 @@ class ScanCommand extends Command
         }
 
         $clientOptions = [
-            RequestOptions::TIMEOUT         => $input->getOption('timeout'),
-            RequestOptions::VERIFY          => !$input->getOption('skip-verification'),
+            RequestOptions::TIMEOUT => $input->getOption('timeout'),
+            RequestOptions::VERIFY => ! $input->getOption('skip-verification'),
             RequestOptions::ALLOW_REDIRECTS => [
                 'track_redirects' => true,
             ],
