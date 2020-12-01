@@ -87,7 +87,7 @@ class CrawlLogger extends CrawlObserver
     }
 
     /**
-     * @param string|null $haystack
+     * @param string|null  $haystack
      * @param string|array $needles
      *
      * @return bool
@@ -181,7 +181,7 @@ class CrawlLogger extends CrawlObserver
         ?UriInterface $foundOnUrl = null
     ) {
         // if its not a redirect the return false
-        if (! $response->getHeader('X-Guzzle-Redirect-History')) {
+        if (!$response->getHeader('X-Guzzle-Redirect-History')) {
             return false;
         }
 
