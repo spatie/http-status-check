@@ -95,7 +95,7 @@ class ScanCommandTest extends TestCase
      */
     protected function appearsInConsoleOutput($texts)
     {
-        if (!is_array($texts)) {
+        if (! is_array($texts)) {
             $texts = [$texts];
         }
 
@@ -118,7 +118,7 @@ class ScanCommandTest extends TestCase
 
         $commandTester->setInputs(['y']);
         $commandTester->execute([
-            'url'      => 'http://localhost:8080',
+            'url' => 'http://localhost:8080',
             '--output' => $this->overwriteFile,
         ]);
 
@@ -126,7 +126,7 @@ class ScanCommandTest extends TestCase
 
         $commandTester->setInputs(['y']);
         $commandTester->execute([
-            'url'      => 'http://localhost:8080',
+            'url' => 'http://localhost:8080',
             '--output' => $this->overwriteFile,
         ]);
 

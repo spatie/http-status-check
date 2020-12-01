@@ -181,7 +181,7 @@ class CrawlLogger extends CrawlObserver
         ?UriInterface $foundOnUrl = null
     ) {
         // if its not a redirect the return false
-        if (!$response->getHeader('X-Guzzle-Redirect-History')) {
+        if (! $response->getHeader('X-Guzzle-Redirect-History')) {
             return false;
         }
 
@@ -204,7 +204,7 @@ class CrawlLogger extends CrawlObserver
         }
 
         // Add the redirects and final URL as results
-        foreach ($fullRedirectReport as $k=>$redirect) {
+        foreach ($fullRedirectReport as $k => $redirect) {
             $this->addResult(
                 (string) $redirect['location'],
                 (string) $foundOnUrl,
