@@ -15,7 +15,7 @@ class ScanCommandTest extends TestCase
     /** @var string */
     protected $outputFile;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
