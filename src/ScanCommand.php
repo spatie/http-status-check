@@ -15,7 +15,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ScanCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('scan')
             ->setDescription('Check the http status code of all links on a website.')

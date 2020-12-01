@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
 npm install
+cd tests/server
+npm install
 
-if [ -z ${TRAVIS_JOB_ID} ]; then
-    # not running under travis, stay in foreground until stopped
-    node server.js
-else
-    cd tests/server
+pwd
+ls -al
 
-    # running under travis, daemonize
-    (node server.js &) || /bin/true
-fi
+(node server.js &) || /bin/true
