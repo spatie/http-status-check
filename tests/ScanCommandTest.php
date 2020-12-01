@@ -118,16 +118,16 @@ class ScanCommandTest extends TestCase
 
         $commandTester->setInputs(['y']);
         $commandTester->execute([
-            'url'      =>  'http://localhost:8080',
-            '--output' =>  $this->overwriteFile,
+            'url' => 'http://localhost:8080',
+            '--output' => $this->overwriteFile,
         ]);
 
         $this->assertFileEquals(__DIR__.'/fixtures/overwrite.txt', $this->overwriteFile);
 
         $commandTester->setInputs(['y']);
         $commandTester->execute([
-            'url'      =>  'http://localhost:8080',
-            '--output' =>  $this->overwriteFile,
+            'url' => 'http://localhost:8080',
+            '--output' => $this->overwriteFile,
         ]);
 
         $this->assertFileEquals(__DIR__.'/fixtures/overwrite.txt', $this->overwriteFile);

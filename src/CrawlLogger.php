@@ -204,7 +204,7 @@ class CrawlLogger extends CrawlObserver
         }
 
         // Add the redirects and final URL as results
-        foreach ($fullRedirectReport as $k=>$redirect) {
+        foreach ($fullRedirectReport as $k => $redirect) {
             $this->addResult(
                 (string) $redirect['location'],
                 (string) $foundOnUrl,
