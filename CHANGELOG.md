@@ -2,6 +2,10 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 3.3.0 - 2020-12-01
+
+- Add support for PHP 8
+
 ## 3.2.0 - 2020-03-18
 
 - follow and log redirects as multiple responses (#66)
