@@ -73,7 +73,8 @@ To run the tests, first make sure you have [Node.js](https://nodejs.org/) instal
 
 ```bash
 cd tests/server
-./start_server.sh
+npm install
+node server.js
 ```
 
 With the server running, you can start testing:
