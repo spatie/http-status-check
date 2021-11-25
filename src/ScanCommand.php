@@ -64,6 +64,12 @@ class ScanCommand extends Command
                 'Skips checking the SSL certificate'
             )
             ->addOption(
+                'auth',
+                'a',
+                InputOption::VALUE_OPTIONAL,
+                'Username and password for basic auth (username:password)'
+            )
+            ->addOption(
                 'options',
                 'opt',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
@@ -125,6 +131,10 @@ class ScanCommand extends Command
         ];
 
         $clientOptions = array_merge($clientOptions, $input->getOption('options'));
+
+        if ($input->getOption('auth') && false !== strpos($input->getOption('auth'), ':')) {
+            $clientOptions[RequestOptions::AUTH] = explode(':', $input->getOption('auth'));
+        }
 
         if ($input->getOption('user-agent')) {
             $clientOptions[RequestOptions::HEADERS]['user-agent'] = $input->getOption('user-agent');
