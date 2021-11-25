@@ -10,8 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlLogger extends CrawlObserver
 {
-    const UNRESPONSIVE_HOST = 'Host did not respond';
-    const REDIRECT = 'Redirect';
+    public const UNRESPONSIVE_HOST = 'Host did not respond';
+    public const REDIRECT = 'Redirect';
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
