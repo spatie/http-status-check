@@ -67,6 +67,12 @@ By default, the crawler will respect robots data. You can ignore them though wit
 http-status-check scan https://example.com --ignore-robots
 ```
 
+If your site requires a basic authentification, you can use the `--auth` option:
+
+```bash
+http-status-check scan https://example.com --auth=username:password
+```
+
 ## Testing
 
 To run the tests, first make sure you have [Node.js](https://nodejs.org/) installed. Then start the included node based server in a separate terminal window:
