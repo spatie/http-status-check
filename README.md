@@ -1,4 +1,3 @@
-
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
 
 # Check the HTTP status code of all links on a website
@@ -22,7 +21,7 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 This package can be installed via Composer:
 
-``` bash
+```bash
 composer global require spatie/http-status-check
 ```
 
@@ -34,10 +33,10 @@ This tool will scan all links on a given website:
 http-status-check scan https://example.com
 ```
 
-It outputs a line per link found:
- 
-![screenshot](https://raw.githubusercontent.com/spatie/http-status-check/gh-pages/images/screenshot.png)
- 
+It outputs a line per link found. Here's an example on Laracast website scan:
+
+![screenshot](https://freek.dev/uploads/2015/11/screenshot.png)
+
 When the crawling process is finished a summary will be shown.
 
 By default the crawler uses 10 concurrent connections to speed up the crawling process. You can change that number by passing a different value to the `--concurrency` option:
@@ -106,9 +105,9 @@ If you discover any security related issues, please email freek@spatie.be instea
 
 ## Credits
 
-- [Freek Van der Herten](https://github.com/freekmurze)
-- [Sebastian De Deyne](https://github.com/sebastiandedeyne)
-- [All Contributors](../../contributors)
+-   [Freek Van der Herten](https://github.com/freekmurze)
+-   [Sebastian De Deyne](https://github.com/sebastiandedeyne)
+-   [All Contributors](../../contributors)
 
 ## License
 
