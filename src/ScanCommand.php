@@ -3,9 +3,9 @@
 namespace Spatie\HttpStatusCheck;
 
 use GuzzleHttp\RequestOptions;
-use Spatie\Crawler\CrawlAllUrls;
 use Spatie\Crawler\Crawler;
-use Spatie\Crawler\CrawlInternalUrls;
+use Spatie\Crawler\CrawlProfiles\CrawlAllUrls;
+use Spatie\Crawler\CrawlProfiles\CrawlInternalUrls;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
