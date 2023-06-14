@@ -2,6 +2,13 @@
 
 All notable changes to `spatie/http-status-check` will be documented in this file.
 
+## 4.0 - 2023-06-14
+
+- Remove support for PHP 8.0
+- Update spatie/crawler
+- Bump dependencies
+- Fix deprecation notices related to spatie/crawler
+
 ## 3.3.0 - 2020-12-01
 
 - Add support for PHP 8
